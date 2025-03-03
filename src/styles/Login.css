@@ -1,0 +1,22 @@
+body{
+    background-color:lightgray;
+    align-items: center;
+}
+
+.login_body{
+    text-align: center;
+}
+
+.login_form{
+    background-color: rgb(255, 255, 255);
+    position: absolute;
+    border-radius: 8px; 
+}
+
+.form_cnt{
+    margin: 16px;
+}
+
+.titulo_form{
+    font-size: 22px;
+}
