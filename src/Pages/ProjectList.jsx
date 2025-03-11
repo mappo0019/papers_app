@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react"
+import Boton from "../Components/Boton";
 
 function ProjectList(props) {
       const {id} = useParams();
@@ -41,14 +42,33 @@ function ProjectList(props) {
         fetchData(currentPage);
       }, [currentPage]);
 
-        return (
-          <div>
-              <h3>Papers de {id}</h3>
-              {data.map((resp)=>(
-                <li>{resp.title} <a href={resp.id}> Enlace </a> </li> 
-              ))}
+      async function submitPapers(){
+        const pack={
+          user: id,
+          raw: data
+        } 
 
-          </div>
+        const posting = await fetch("http://localhost:5154/api/papers", {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
+          body: JSON.stringify(pack),
+        });
+
+        const good = await posting.json();
+
+        console.log(good);
+      }
+
+        return (
+          <>
+            <div>
+                <h3>Papers de {id}</h3>
+                {data.map((resp)=>(
+                  <li>{resp.title} <a href={resp.id}> Enlace </a> </li> 
+                ))}
+            </div>
+            <Boton name = "Llevar a la BD" onClickAlto={submitPapers}/>
+          </>
         );
   }
   
