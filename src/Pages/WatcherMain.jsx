@@ -11,7 +11,6 @@ function WatcherMain() {
       let promise = await fetch(`http://localhost:5154/api/projects`);
       let result =await promise.json();
       setResponse(result);
-      console.log(result);
   }
 
   searchProjects();

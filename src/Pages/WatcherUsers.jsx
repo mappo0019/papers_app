@@ -4,42 +4,45 @@ import { useParams } from "react-router-dom";
 
 function WatcherUsers() {
 
-    const {id} = useParams();
+  const {id} = useParams();
 
   const [users, setUsers] = useState([]);
   const [response, setResponse] = useState([]);
+  const [primera, setPrimera] = useState(false);
 
   useEffect(()=>{
     
-  //AQUI SACAR LOS USUARIOS CON LOS IDS
-    searchUsers();;
+    searchUsers();
+
   }, [])
+
+  useEffect(()=>{
+      getUsers();
+  
+    }, [primera])
 
   const searchUsers = async ()=>{
     let promise = await fetch(`http://localhost:5154/api/projects/${id}`);
     let result =await promise.json();
     setResponse(result.participantes);
+    setPrimera(true);
+    
   }
 
-  const getUsers = () =>{
+  const getUsers = () =>{ 
       response.map(async (participa)=>{
         let promise = await fetch(`http://localhost:5154/api/users/${participa}`);
-      let result =await promise.json();
-      if(users.length < 2){
-        setUsers([...users, result]);
-      }
+        let result =await promise.json();
+        setUsers(users=> [...users, result]);        
       })   
   }
-
-  getUsers();
-
-    return (
-      <div>
-        {users.map((resp)=>(
-                <Boton name ={resp.name} route = {`/project_list/${resp.openAlex_id}`}></Boton>
-              ))}
-      </div>
-    );
+  return (
+    <div>
+      {users.map((resp)=>(
+        <Boton name ={resp.name} route = {`/project_list/${resp.openAlex_id}`}></Boton>
+      ))}
+    </div>
+  );
   }
   
   export default WatcherUsers;
