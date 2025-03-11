@@ -1,23 +1,27 @@
 import Boton from "../Components/Boton";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function WatcherMain() {
 
   const [input, setInput] = useState("");
-  const [response, setResponse] = useState("");
+  const [response, setResponse] = useState([]);
 
-  async function searchPapers(){
-    let promise = await fetch(`https://api.openalex.org/works?filter=author.id:${input}`);
-    let response = await promise.json();
-    console.log(response);
+  useEffect(()=>{
+    const searchProjects = async ()=>{
+      let promise = await fetch(`http://localhost:5154/api/projects`);
+      let result =await promise.json();
+      setResponse(result);
+      console.log(result);
   }
+
+  searchProjects();
+  }, [])
 
     return (
       <div>
-          <h3>Busca los papers de:</h3>
-          <input placeholder = "Introduzca un nombre..." type="text" onInput={e => setInput(e.target.value)}/>
-          <Boton name ="Buscar" onClickAlto={searchPapers}></Boton>
-          <h1>{response}</h1>
+        {response.map((resp)=>(
+                <Boton name ={resp.name} route = {`/watcher_users/${resp.Id}`}></Boton>
+              ))}
       </div>
     );
   }
