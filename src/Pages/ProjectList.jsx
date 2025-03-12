@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 import Boton from "../Components/Boton";
 
 function ProjectList(props) {
@@ -42,20 +42,27 @@ function ProjectList(props) {
         fetchData(currentPage);
       }, [currentPage]);
 
+      const generarHex24 = () => {
+        const array = new Uint8Array(12); // 12 bytes = 24 caracteres hexadecimales
+        window.crypto.getRandomValues(array);
+        return Array.from(array, byte => byte.toString(16).padStart(2, "0")).join("");
+      };
+
       async function submitPapers(){
+
         const pack={
+          id: generarHex24(),
           user: id,
-          raw: data
+          raw: JSON.stringify(data)
         } 
 
         const posting = await fetch("http://localhost:5154/api/papers", {
           method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
+          headers: { 'Content-Type': 'application/json; charset=UTF-8' },
           body: JSON.stringify(pack),
-        });
+        })
 
         const good = await posting.json();
-
         console.log(good);
       }
 
