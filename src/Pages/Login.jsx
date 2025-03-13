@@ -5,7 +5,7 @@ function Login() {
   return (
     <>
       <div className ="login_body">
-        <h1>TITULO DE LA APLICACIÓN</h1>
+        <h1>PAPERS APP</h1>
         <div className="login_form">
           <LoginForm />
         </div>
