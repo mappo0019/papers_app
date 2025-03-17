@@ -12,7 +12,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="creator_main" element={<CreatorMain />} />
+        <Route path="creator_main/:id" element={<CreatorMain />} />
         <Route path="watcher_main" element={<WatcherMain />} />
         <Route path="watcher_users/:id" element={<WatcherUsers />} />
         <Route path="project_list/:id" element={<ProjectList />} />
