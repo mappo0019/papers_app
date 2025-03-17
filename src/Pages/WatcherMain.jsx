@@ -1,5 +1,7 @@
+import "../styles/WatcherMain.css"
 import Boton from "../Components/Boton";
 import { useEffect, useState } from "react";
+import FichaProyecto from "../Components/FichaProyecto";
 
 function WatcherMain() {
 
@@ -17,11 +19,18 @@ function WatcherMain() {
   }, [])
 
     return (
-      <div>
-        {response.map((resp)=>(
-                <Boton name ={resp.name} route = {`/watcher_users/${resp.Id}`}></Boton>
-              ))}
-      </div>
+      <>
+        <div className = "watcher-body">
+          <h2>PROYECTOS A LOS QUE SIGUES</h2>
+          <div>
+          {response.map((resp)=>(
+                  <FichaProyecto name ={resp.name} route = {`/watcher_users/${resp.Id}`}/>
+                ))}
+        </div>
+        </div>
+        
+      </>
+      
     );
   }
   
