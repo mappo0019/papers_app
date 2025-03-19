@@ -20,8 +20,14 @@ function CreatorMain() {
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+        
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const itemsPerPage = 25;
 
     var participantesId = [];
+    var Paperdata = [];
+    var hasMore = true;
 
     useEffect(()=>{
         const getUser = async ()=>{
@@ -45,21 +51,26 @@ function CreatorMain() {
         alert("El Proyecto debe de tener un Nombre");
       }
       else{
+
+        //ACTUALIZAR USERS
         participantes.map((participa)=>{
           participantesId.push(participa.id);
         });
-
+/*
         participantes.map(async(participa)=>{
-            var new_participantesId = participantesId.filter(a=> a != participa.id);
-            const new_user={
-              Id: participa.id,
-              name: participa.name,
-              openAlex_id:participa.openAlex_id,
-              project:[idProject],
-              coworkers:new_participantesId,
-            }
-            
+
+            var new_participantesId = participantesId.filter(a=> a != participa.id); 
+
             if(participa.id != main.Id){
+            //AÑADIR NUEVOS
+              const new_user={
+                Id: participa.id,
+                name: participa.name,
+                openAlex_id:participa.openAlex_id,
+                project:[idProject],
+                coworkers:new_participantesId,
+              }
+
               const posting = await fetch("http://localhost:5154/api/users", {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json; charset=UTF-8' },
@@ -68,8 +79,21 @@ function CreatorMain() {
       
               const good = await posting.json();
               console.log(good);
+              
             }
             else{
+
+              //ACTUALIZAR MAIN
+              var cow = [...main.coworkers, ...new_participantesId];
+
+              const new_user={
+                Id: participa.id,
+                name: participa.name,
+                openAlex_id:participa.openAlex_id,
+                project:[...main.project, idProject],
+                coworkers:cow,
+              }
+
               fetch(`http://localhost:5154/api/users/${main.Id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json; charset=UTF-8' },
@@ -77,35 +101,90 @@ function CreatorMain() {
               }).then(response => response.json())
               .then(data => console.log(data))
               .catch(err => console.log(err))
+              
             }
-
-
           });
-          
-          
-      ////////FALTA CREAR PROYECTO
-        
-        /*const new_project={
+
+          //POST PROYECTO
+          const new_project={
           Id: idProject,
           name: nombre,
-          main_researcher: ,
+          main_researcher: main.Id,
           descripcion: desc,
-          participantes:[],
+          participantes:participantesId,
           presupuesto: 0.0,
-        }*/
-        alert("Ready pal submit");
+        }
+
+        const posting = await fetch("http://localhost:5154/api/projects", {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json; charset=UTF-8' },
+          body: JSON.stringify(new_project),
+        })
+
+        const good = await posting.json();
+        console.log(good);*/
+
+        //POST PAPERS
+        participantes.map(async(participa)=>{
+          Paperdata = [];
+          setCurrentPage(1);
+          hasMore = true;
+
+          fetchData(currentPage, participa.openAlex_id);
+          
+            const new_paper = {
+              Id: generarHex24(),
+              user: participa.openAlex_id,
+              raw: JSON.stringify(Paperdata),
+            }
+
+            const posting = await fetch("http://localhost:5154/api/papers", {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json; charset=UTF-8' },
+              body: JSON.stringify(new_paper),
+            })
+    
+            const good = await posting.json();
+            console.log(good);
+        });
+
+        alert("Proyecto creado con éxito");
         
+      }
+    }
+
+    async function fetchData(page, userId){
+      try {
+          
+        const response = await fetch(`https://api.openalex.org/works?filter=author.id:${userId}&page=${page}`);
+        const result = await response.json();
+        /////////////////////////////////////////////////////////////////ESTO DA FALSE SIEMRPE!!!
+        if(result.results){
+          Paperdata.push(result.results); 
+        if (result.meta.count-(itemsPerPage*(currentPage-1)) < itemsPerPage) {
+          hasMore = false; 
+        }
+      }
+      else{
+        hasMore = false;
+      }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        console.log(hasMore);
+        if (hasMore) {
+          setCurrentPage((prevPage) => prevPage + 1);
+          fetchData(currentPage, userId);
+        }
       }
     }
 
     function addUser(){
       if (userNombre != "" && userId != ""){
         setParticipantes([...participantes, {id: generarHex24(), name: userNombre, openAlex_id: userId}]);
-        
-        alert("Usuario añadido");
       }
       else{
-        alert("Error al añadir usuario, faltan campos");
+        alert("Error al añadir usuario, todos los campos deben rellenarse");
       }
     }
 
