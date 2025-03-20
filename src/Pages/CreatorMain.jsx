@@ -20,14 +20,13 @@ function CreatorMain() {
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
-        
-    const [currentPage, setCurrentPage] = useState(1);
 
     const itemsPerPage = 25;
 
     var participantesId = [];
     var Paperdata = [];
     var hasMore = true;
+    var currentPage = 1;
 
     useEffect(()=>{
         const getUser = async ()=>{
@@ -56,7 +55,7 @@ function CreatorMain() {
         participantes.map((participa)=>{
           participantesId.push(participa.id);
         });
-/*
+
         participantes.map(async(participa)=>{
 
             var new_participantesId = participantesId.filter(a=> a != participa.id); 
@@ -122,20 +121,19 @@ function CreatorMain() {
         })
 
         const good = await posting.json();
-        console.log(good);*/
+        console.log(good);
 
         //POST PAPERS
-        participantes.map(async(participa)=>{
+        for (let i = 0; i < participantes.length; i++){
           Paperdata = [];
-          setCurrentPage(1);
+          currentPage = 1;
           hasMore = true;
 
-          fetchData(currentPage, participa.openAlex_id);
-          
+          await fetchData(currentPage, participantes[i].openAlex_id);
             const new_paper = {
               Id: generarHex24(),
-              user: participa.openAlex_id,
-              raw: JSON.stringify(Paperdata),
+              user: participantes[i].openAlex_id,
+              raw: JSON.stringify(await Paperdata),
             }
 
             const posting = await fetch("http://localhost:5154/api/papers", {
@@ -146,7 +144,8 @@ function CreatorMain() {
     
             const good = await posting.json();
             console.log(good);
-        });
+            
+        }
 
         alert("Proyecto creado con éxito");
         
@@ -158,23 +157,28 @@ function CreatorMain() {
           
         const response = await fetch(`https://api.openalex.org/works?filter=author.id:${userId}&page=${page}`);
         const result = await response.json();
-        /////////////////////////////////////////////////////////////////ESTO DA FALSE SIEMRPE!!!
-        if(result.results){
-          Paperdata.push(result.results); 
-        if (result.meta.count-(itemsPerPage*(currentPage-1)) < itemsPerPage) {
+
+
+        if(await result.results){
+          Paperdata.push(await result.results); 
+
+        if (await result.meta.count-(itemsPerPage*(currentPage-1)) < itemsPerPage) {  
           hasMore = false; 
+        }
+        else{
+          hasMore = true;
         }
       }
       else{
         hasMore = false;
       }
+
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
-        console.log(hasMore);
         if (hasMore) {
-          setCurrentPage((prevPage) => prevPage + 1);
-          fetchData(currentPage, userId);
+          currentPage++;
+          await fetchData(currentPage, userId);
         }
       }
     }

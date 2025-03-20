@@ -70,7 +70,9 @@ function ProjectList(props) {
           <>
             <div>
                 <h3>Papers de {id}</h3>
-                {data.map((resp)=>(
+                {data.length === 0 ? 
+                (<p> Este usuario no ha publicado ningún paper en OpenAlex</p>) : 
+                data.map((resp)=>(
                   <li>{resp.title} <a href={resp.id}> Enlace </a> </li> 
                 ))}
             </div>
