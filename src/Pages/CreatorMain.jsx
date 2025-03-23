@@ -133,10 +133,10 @@ function CreatorMain() {
             const new_paper = {
               Id: generarHex24(),
               user: participantes[i].openAlex_id,
-              raw: JSON.stringify(await Paperdata),
+              raw: await Paperdata,
             }
 
-            const posting = await fetch("http://localhost:5154/api/papers", {
+           const posting = await fetch("http://localhost:5154/api/papers", {
               method: 'POST',
               headers: { 'Content-Type': 'application/json; charset=UTF-8' },
               body: JSON.stringify(new_paper),
@@ -160,7 +160,10 @@ function CreatorMain() {
 
 
         if(await result.results){
-          Paperdata.push(await result.results); 
+          for(let i = 0; i < await result.results.length; i++){
+            let result_string = JSON.stringify (await result.results[i]);
+            Paperdata.push(await result_string);
+          }
 
         if (await result.meta.count-(itemsPerPage*(currentPage-1)) < itemsPerPage) {  
           hasMore = false; 
