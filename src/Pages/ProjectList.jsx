@@ -12,12 +12,12 @@ function ProjectList(props) {
       const fetchData = async () => {
         try {
          
-          const response = await fetch(`http://localhost:5154/api/papers?idUser=${id}`);
+          const response = await fetch(`http://localhost:5154/api/papers/us?user=${id}`);
           const result = await response.json();
 
-          for (let i = 0; i < await result[0].raw.length; i++){
+          for (let i = 0; i < await result.raw.length; i++){
             if(contador < 149){
-              data2.push(await JSON.parse(await result[0].raw[i])) 
+              data2.push(await JSON.parse(await result.raw[i])) 
               contador++;
               setData(data2);
             }
@@ -36,7 +36,7 @@ function ProjectList(props) {
         return (
           <>
             <div>
-                <h3>Papers de {id}</h3>
+                <h3>Papers de {id}  http://localhost:5154/api/papers/us?user={id}</h3>
                 {data.length === 0 ? 
                 (<p> Este usuario no ha publicado ningún paper en OpenAlex</p>) : 
                 data.map((resp)=>(
