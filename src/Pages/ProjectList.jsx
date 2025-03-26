@@ -1,7 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import Boton from "../Components/Boton";
-
+import * as d3 from "d3";
 function ProjectList(props) {
       const {id} = useParams();
 
@@ -30,13 +29,15 @@ function ProjectList(props) {
 
       useEffect(() => {
         fetchData();
+
+        
       }, []);
 
 
         return (
           <>
             <div>
-                <h3>Papers de {id}  http://localhost:5154/api/papers/us?user={id}</h3>
+                <h3>Papers de {id}  </h3>
                 {data.length === 0 ? 
                 (<p> Este usuario no ha publicado ningún paper en OpenAlex</p>) : 
                 data.map((resp)=>(
