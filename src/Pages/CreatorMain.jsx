@@ -24,7 +24,8 @@ function CreatorMain() {
     const itemsPerPage = 25;
 
     var participantesId = [];
-    var Paperdata = [];
+    var userIds = [];
+    var userNames = [];
     var hasMore = true;
     var currentPage = 1;
 
@@ -50,7 +51,7 @@ function CreatorMain() {
         alert("El Proyecto debe de tener un Nombre");
       }
       else{
-
+        /*
         //ACTUALIZAR USERS
         participantes.map((participa)=>{
           participantesId.push(participa.id);
@@ -122,14 +123,15 @@ function CreatorMain() {
 
         const good = await posting.json();
         console.log(good);
-
+      */
         //POST PAPERS
         for (let i = 0; i < participantes.length; i++){
-          Paperdata = [];
+          userIds = [];
           currentPage = 1;
           hasMore = true;
 
           await fetchData(currentPage, participantes[i].openAlex_id);
+          /*
             const new_paper = {
               Id: generarHex24(),
               user: participantes[i].openAlex_id,
@@ -144,7 +146,7 @@ function CreatorMain() {
     
             const good = await posting.json();
             console.log(good);
-            
+            */
         }
 
         alert("Proyecto creado con éxito");
@@ -161,8 +163,11 @@ function CreatorMain() {
 
         if(await result.results){
           for(let i = 0; i < await result.results.length; i++){
-            let result_string = JSON.stringify (await result.results[i]);
-            Paperdata.push(await result_string);
+            var authors = await result.results[i].authorships;
+            for(let i = 0; i < await authors.length; i++){
+              userIds.push(authors[i].author.id.substring(21));
+              userNames.push(authors[i].author.display_name);
+            }
           }
 
         if (await result.meta.count-(itemsPerPage*(currentPage-1)) < itemsPerPage) {  
