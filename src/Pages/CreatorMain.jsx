@@ -24,8 +24,8 @@ function CreatorMain() {
     const itemsPerPage = 25;
 
     var participantesId = [];
-    var userIds = [];
-    var userNames = [];
+    var nodes = [];
+    var links = [];
     var hasMore = true;
     var currentPage = 1;
 
@@ -51,7 +51,7 @@ function CreatorMain() {
         alert("El Proyecto debe de tener un Nombre");
       }
       else{
-        /*
+        
         //ACTUALIZAR USERS
         participantes.map((participa)=>{
           participantesId.push(participa.id);
@@ -123,30 +123,32 @@ function CreatorMain() {
 
         const good = await posting.json();
         console.log(good);
-      */
+      
         //POST PAPERS
         for (let i = 0; i < participantes.length; i++){
-          userIds = [];
+          nodes = [];
+          links = []
           currentPage = 1;
           hasMore = true;
 
           await fetchData(currentPage, participantes[i].openAlex_id);
-          /*
-            const new_paper = {
+          
+            const new_graph_data = {
               Id: generarHex24(),
-              user: participantes[i].openAlex_id,
-              raw: await Paperdata,
+              user: participantes[i].openAlex_id.toUpperCase(),
+              authors: await nodes,
+              relationship: await links
             }
 
-           const posting = await fetch("http://localhost:5154/api/papers", {
+           const posting = await fetch("http://localhost:5154/api/graphData", {
               method: 'POST',
               headers: { 'Content-Type': 'application/json; charset=UTF-8' },
-              body: JSON.stringify(new_paper),
+              body: JSON.stringify(new_graph_data),
             })
     
             const good = await posting.json();
             console.log(good);
-            */
+            
         }
 
         alert("Proyecto creado con éxito");
@@ -165,8 +167,18 @@ function CreatorMain() {
           for(let i = 0; i < await result.results.length; i++){
             var authors = await result.results[i].authorships;
             for(let i = 0; i < await authors.length; i++){
-              userIds.push(authors[i].author.id.substring(21));
-              userNames.push(authors[i].author.display_name);
+              const new_node = {
+                Ident: generarHex24(),
+                id: authors[i].author.id.substring(21),
+                name: authors[i].author.display_name,
+              }
+
+              const new_link = {
+                source: userId.toUpperCase(),
+                target: authors[i].author.id.substring(21),
+              }
+              nodes.push(new_node);
+              links.push(new_link);
             }
           }
 

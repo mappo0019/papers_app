@@ -6,7 +6,21 @@ function ProjectList(props) {
 
       const [data, setData] = useState([]); 
       var data2 = []; 
-      var contador = 0;       
+      var contador = 0; 
+      
+      var margin = {top: 10, right: 30, bottom: 30, left: 40},
+      width = 400 - margin.left - margin.right,
+      height = 400 - margin.top - margin.bottom;
+      
+      var svg = d3.select("#my_dataviz")
+      .append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform",
+            "translate(" + margin.left + "," + margin.top + ")");
+
+      //SEGUIR EN D3.JSON QUE NO SE QUE HACE
 
       const fetchData = async () => {
         try {
@@ -44,6 +58,8 @@ function ProjectList(props) {
                   <li>{resp.title} <a href={resp.id}> Enlace </a> </li> 
                 ))}
             </div>
+
+            <div id="my_dataviz"></div>
           </>
         );
   }
