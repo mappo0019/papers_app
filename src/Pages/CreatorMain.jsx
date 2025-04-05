@@ -23,11 +23,14 @@ function CreatorMain() {
 
     const itemsPerPage = 25;
 
+    var papers = [];
+    var graphDatas = [];
     var participantesId = [];
     var nodes = [];
     var links = [];
     var hasMore = true;
     var currentPage = 1;
+    var newpaper = true;
 
     useEffect(()=>{
         const getUser = async ()=>{
@@ -51,7 +54,7 @@ function CreatorMain() {
         alert("El Proyecto debe de tener un Nombre");
       }
       else{
-        
+       
         //ACTUALIZAR USERS
         participantes.map((participa)=>{
           participantesId.push(participa.id);
@@ -115,42 +118,57 @@ function CreatorMain() {
           presupuesto: 0.0,
         }
 
-        const posting = await fetch("http://localhost:5154/api/projects", {
+        const posting1 = await fetch("http://localhost:5154/api/projects", {
           method: 'POST',
           headers: { 'Content-Type': 'application/json; charset=UTF-8' },
           body: JSON.stringify(new_project),
         })
 
-        const good = await posting.json();
-        console.log(good);
+        const good1 = await posting1.json();
+        console.log(good1);
       
         //POST PAPERS
         for (let i = 0; i < participantes.length; i++){
           nodes = [];
           links = []
+          graphDatas = [];
           currentPage = 1;
           hasMore = true;
 
           await fetchData(currentPage, participantes[i].openAlex_id);
           
-            const new_graph_data = {
-              Id: generarHex24(),
-              user: participantes[i].openAlex_id.toUpperCase(),
-              authors: await nodes,
-              relationship: await links
-            }
-
-           const posting = await fetch("http://localhost:5154/api/graphData", {
+        }
+        console.log(papers);
+/*
+          for (let j = 0; j < graphDatas.length; j++){
+            const posting = await fetch("http://localhost:5154/api/graphData", {
               method: 'POST',
               headers: { 'Content-Type': 'application/json; charset=UTF-8' },
-              body: JSON.stringify(new_graph_data),
+              body: JSON.stringify(graphDatas[j]),
             })
     
             const good = await posting.json();
             console.log(good);
+          } 
             
         }
+        
 
+        const new_project_papers = {
+          Id: generarHex24(),
+          project: idProject,
+          raw: (papers)
+        }
+
+        const posting = await fetch("http://localhost:5154/api/projectPapers", {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json; charset=UTF-8' },
+          body: JSON.stringify(new_project_papers),
+        })
+
+        const good = await posting.json();
+        console.log(good);
+*/
         alert("Proyecto creado con éxito");
         
       }
@@ -164,23 +182,49 @@ function CreatorMain() {
 
 
         if(await result.results){
-          for(let i = 0; i < await result.results.length; i++){
-            var authors = await result.results[i].authorships;
-            for(let i = 0; i < await authors.length; i++){
+
+        for(let i = 0; i < await result.results.length; i++){
+            nodes = [];
+            links = [];
+            let authors = await result.results[i].authorships;
+
+            for(let j = 0; j < await authors.length; j++){
+
               const new_node = {
                 Ident: generarHex24(),
-                id: authors[i].author.id.substring(21),
-                name: authors[i].author.display_name,
-              }
+                id: await authors[j].author.id.substring(21),
+                name: await authors[j].author.display_name,
+              }         
 
               const new_link = {
                 source: userId.toUpperCase(),
-                target: authors[i].author.id.substring(21),
+                target: await authors[j].author.id.substring(21),
+                value: 1,
               }
-              nodes.push(new_node);
-              links.push(new_link);
+              nodes.push(await new_node);
+              links.push(await new_link);
+
             }
-          }
+
+            const new_graph_data = {
+              Id: generarHex24(),
+              user: await userId.toUpperCase(),
+              authors: await nodes,
+              relationship: await links
+            }
+
+            graphDatas.push(new_graph_data);
+            newpaper = true;
+
+            for(var k = 0; k < papers.length; k++)
+              if (papers[k].id === await result.results[i].id)
+                newpaper = false;
+            ////////////////////////////FALTA FILTRAR PAPERS QUE ANTES FUNCIONABA PERO YA NO ???????
+            if(newpaper){
+              papers.push(JSON.stringify(await result.results[i]));
+            }
+
+        }
 
         if (await result.meta.count-(itemsPerPage*(currentPage-1)) < itemsPerPage) {  
           hasMore = false; 
