@@ -44,7 +44,7 @@ function WatcherUsers() {
         <div>
         {users.map((resp)=>(
           <>
-            <Boton className = "" name ={resp.name} route = {`/project_list/${resp.openAlex_id}`}></Boton>
+            <Boton className = "" name ={resp.name} route = {`/user_list/${resp.openAlex_id}`}></Boton>
             <br></br>
           </>
           

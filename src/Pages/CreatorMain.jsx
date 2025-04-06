@@ -59,6 +59,7 @@ function CreatorMain() {
         participantes.map((participa)=>{
           participantesId.push(participa.id);
         });
+        
 
         participantes.map(async(participa)=>{
 
@@ -139,7 +140,7 @@ function CreatorMain() {
           
         }
         console.log(papers);
-/*
+
           for (let j = 0; j < graphDatas.length; j++){
             const posting = await fetch("http://localhost:5154/api/graphData", {
               method: 'POST',
@@ -151,6 +152,10 @@ function CreatorMain() {
             console.log(good);
           } 
             
+        }
+
+        for (var k = 0; k < papers.length; k++){
+          papers[k] = JSON.stringify(papers[k]);
         }
         
 
@@ -168,10 +173,9 @@ function CreatorMain() {
 
         const good = await posting.json();
         console.log(good);
-*/
+
         alert("Proyecto creado con éxito");
         
-      }
     }
 
     async function fetchData(page, userId){
@@ -217,11 +221,11 @@ function CreatorMain() {
             newpaper = true;
 
             for(var k = 0; k < papers.length; k++)
-              if (papers[k].id === await result.results[i].id)
+              if(papers[k].id === await result.results[i].id)
                 newpaper = false;
-            ////////////////////////////FALTA FILTRAR PAPERS QUE ANTES FUNCIONABA PERO YA NO ???????
+                         
             if(newpaper){
-              papers.push(JSON.stringify(await result.results[i]));
+              papers.push(await result.results[i]);
             }
 
         }

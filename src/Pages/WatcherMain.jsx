@@ -4,8 +4,7 @@ import { useEffect, useState } from "react";
 import FichaProyecto from "../Components/FichaProyecto";
 
 function WatcherMain() {
-
-  const [input, setInput] = useState("");
+  
   const [response, setResponse] = useState([]);
 
   useEffect(()=>{
@@ -24,7 +23,10 @@ function WatcherMain() {
           <h2>PROYECTOS A LOS QUE SIGUES</h2>
           <div>
           {response.map((resp)=>(
-                  <FichaProyecto name ={resp.name} route = {`/watcher_users/${resp.Id}`}/>
+            <>
+            <FichaProyecto name ={resp.name} route1 = {`/watcher_users/${resp.Id}`} route2 = {`/project_list/${resp.Id}`}/>
+            </>
+                  
                 ))}
         </div>
         </div>

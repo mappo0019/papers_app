@@ -8,35 +8,49 @@ import "../styles/ProjectList.css";
   const {id} = useParams();
 
   const [data, setData] = useState([]); 
-
+  var data2 = []; 
+  var contador = 0;       
 
   const fetchData = async () => {
     try {
      
-      const response = await fetch(`http://localhost:5154/api/graphData/fcc5cdc825b6267d6e535156`);
+      const response = await fetch(`http://localhost:5154/api/projectPapers/pr?project=${id}`);
       const result = await response.json();
-      console.log(await result.authors);
-      setData(await result);
+
+      for (let i = 0; i < await result.raw.length; i++){
+        if(contador < await result.raw.length){
+          data2.push(await JSON.parse(await result.raw[i])) 
+          contador++;
+          setData(data2);
+        }
+      }
 
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
-        useEffect(() => {
-          fetchData(); 
-          console.log(data); 
-        }, []);
+  useEffect(() => {
+    fetchData();
 
-        return (
-          <>
-            <div>
-                <h3>Papers de {id}  </h3>
-            </div>
+    
+  }, []);
 
-            <Graph width="2500" height="2000" nodes = {data.authors} links = {data.relationship}></Graph>
-          </>
-        );
+
+    return (
+      <>
+        <div>
+            <h3>Papers de {id}  </h3>
+            {data.length === 0 ? 
+            (<p> Este usuario no ha publicado ningún paper en OpenAlex</p>) : 
+            data.map((resp)=>(
+              <li>{resp.title} <a href={resp.id}> Enlace </a> </li> 
+            ))}
+        </div>
+      </>
+    );
   }
   
-  export default ProjectList;
+  export default ProjectList; 
+  
+  //<Graph width="2500" height="2000" nodes = {data.authors} links = {data.relationship}></Graph>
