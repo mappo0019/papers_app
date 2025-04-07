@@ -44,7 +44,7 @@ import "../styles/UserList.css";
               {data.length === 0 ? 
               (<p> Este usuario no ha publicado ningún paper en OpenAlex</p>) : 
               data.map((resp)=>(
-                <li>{resp.title} <a href={resp.id}> Enlace </a> </li> 
+                <li>{resp.title} <a href={`/graph_data/38a372e7b051de2ba01aa643`}> Enlace </a> </li> 
               ))}
           </div>
         </>
@@ -52,4 +52,4 @@ import "../styles/UserList.css";
   }
   
   export default UserList;
-  //<Graph width="2500" height="2000" nodes = {data.authors} links = {data.relationship}></Graph>
+ 

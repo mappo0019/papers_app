@@ -31,6 +31,7 @@ function CreatorMain() {
     var hasMore = true;
     var currentPage = 1;
     var newpaper = true;
+    var newnode = true;
 
     useEffect(()=>{
         const getUser = async ()=>{
@@ -139,7 +140,6 @@ function CreatorMain() {
           await fetchData(currentPage, participantes[i].openAlex_id);
           
         }
-        console.log(papers);
 
           for (let j = 0; j < graphDatas.length; j++){
             const posting = await fetch("http://localhost:5154/api/graphData", {
@@ -152,7 +152,7 @@ function CreatorMain() {
             console.log(good);
           } 
             
-        }
+        
 
         for (var k = 0; k < papers.length; k++){
           papers[k] = JSON.stringify(papers[k]);
@@ -175,6 +175,22 @@ function CreatorMain() {
         console.log(good);
 
         alert("Proyecto creado con éxito");
+
+        for (let i = 0; i < participantes.length; i++){
+        await fetchData(currentPage, participantes[i].openAlex_id);
+        }
+        for (let j = 0; j < graphDatas.length; j++){
+          const posting = await fetch("http://localhost:5154/api/graphData", {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json; charset=UTF-8' },
+            body: JSON.stringify(graphDatas[j]),
+          })
+  
+          const good = await posting.json();
+          console.log(good);
+        } 
+        alert("Proyecto creado con éxito");
+      }
         
     }
 
@@ -200,14 +216,29 @@ function CreatorMain() {
                 name: await authors[j].author.display_name,
               }         
 
-              const new_link = {
-                source: userId.toUpperCase(),
-                target: await authors[j].author.id.substring(21),
-                value: 1,
-              }
-              nodes.push(await new_node);
-              links.push(await new_link);
+              newnode = true;
 
+              for(var k = 0; k < nodes.length; k++)
+                if(nodes[k].id === await new_node.id)
+                  newnode = false;
+                          
+              if(newnode){             
+                for (var l = 0; l < nodes.length; l++){
+                  const new_link = {
+                    source: nodes[l].id,
+                    target: await authors[j].author.id.substring(21),
+                    value: 1,
+                  }
+                  links.push(await new_link);
+                }
+                nodes.push(await new_node);
+              }
+              else{
+                links.forEach(async (element) =>{
+                  if(element.target ===await authors[j].author.id.substring(21))
+                    element.value++;
+                })
+              }
             }
 
             const new_graph_data = {
@@ -218,6 +249,7 @@ function CreatorMain() {
             }
 
             graphDatas.push(new_graph_data);
+
             newpaper = true;
 
             for(var k = 0; k < papers.length; k++)

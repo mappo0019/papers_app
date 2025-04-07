@@ -6,6 +6,7 @@ import WatcherMain from './Pages/WatcherMain';
 import ProjectList from './Pages/ProjectList';
 import UserList from './Pages/UserList';
 import WatcherUsers from './Pages/WatcherUsers';
+import GraphData from './Pages/GraphData';
 
 function App() {
   return (
@@ -17,6 +18,8 @@ function App() {
         <Route path="watcher_users/:id" element={<WatcherUsers />} />
         <Route path="user_list/:id" element={<UserList />} />
         <Route path="project_list/:id" element={<ProjectList />} />
+        <Route path="graph_data/:id" element={<GraphData />} />
+
       </Routes>
     </BrowserRouter>
   );
