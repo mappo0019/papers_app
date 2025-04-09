@@ -6,14 +6,40 @@ export function LoginForm(){
 
     const navigate = useNavigate();
 
-    function submit(){
-        var value = document.getElementById('passwd').value;
-        if(value === ""){
-            navigate("/creator_main");
+    var loginuser = {};
+
+    async function submit(){
+
+        try{
+            var user = document.getElementById('us').value;
+            var passwd = document.getElementById('passwd').value;
+            let promise = await fetch(`http://localhost:5154/api/login/us?user=${user}`);
+            let result =await promise.json();
+            loginuser = await result;
+            
+            if(loginuser.Id != null){
+                if(user === loginuser.user && passwd == loginuser.password){
+                    let promise2 = await fetch(`http://localhost:5154/api/users/us?name=${user}`);
+                    let result2 =await promise2.json();
+                    var rol = await result2.rol;
+                    if(rol){
+                        navigate(`/creator_main/${await result2.Id}`);  
+                    }
+                    else{
+                        navigate(`/watcher_main/${await result2.Id}`);
+                    }
+                }
+                else{
+                    alert("Error: Usuario o contraseña son inválido(s)")
+                }
+            }
+            else{
+                alert("Error: Usuario o contraseña son inválido(s)")
+            }
+        } catch(error){
+            console.error("Error fetching data:", error);
         }
-        else{
-            navigate("/watcher_main");
-        }
+            
         
     }
 
@@ -23,7 +49,7 @@ export function LoginForm(){
 
             <div className="form_cnt">
                 <label htmlFor="user" className="titulo_form">User:</label>
-                <input type="text" className="input_login" place required/>
+                <input id ="us" type="text" className="input_login" place required/>
             </div>
 
             <div className="form_cnt">

@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import {Graph} from "../Components/Graph.tsx";
-import * as d3 from "d3";
+//import * as d3 from "d3";
 import "../styles/ProjectList.css";
 
  function ProjectList(props) {

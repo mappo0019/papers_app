@@ -1,4 +1,4 @@
-import * as d3 from "d3"; // we will need d3.js
+//import * as d3 from "d3"; 
 import React, { useEffect, useRef } from "react";
 
 

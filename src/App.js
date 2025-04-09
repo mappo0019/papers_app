@@ -14,7 +14,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="creator_main/:id" element={<CreatorMain />} />
-        <Route path="watcher_main" element={<WatcherMain />} />
+        <Route path="watcher_main/:id" element={<WatcherMain />} />
         <Route path="watcher_users/:id" element={<WatcherUsers />} />
         <Route path="user_list/:id" element={<UserList />} />
         <Route path="project_list/:id" element={<ProjectList />} />
