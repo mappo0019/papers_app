@@ -216,13 +216,6 @@ function CreatorMain() {
                 name: await authors[j].author.display_name,
               }         
 
-              newnode = true;
-
-              for(var k = 0; k < nodes.length; k++)
-                if(nodes[k].id === await new_node.id)
-                  newnode = false;
-                          
-              if(newnode){             
                 for (var l = 0; l < nodes.length; l++){
                   const new_link = {
                     source: nodes[l].id,
@@ -232,13 +225,6 @@ function CreatorMain() {
                   links.push(await new_link);
                 }
                 nodes.push(await new_node);
-              }
-              else{
-                links.forEach(async (element) =>{
-                  if(element.target ===await authors[j].author.id.substring(21))
-                    element.value++;
-                })
-              }
             }
 
             const new_graph_data = {
