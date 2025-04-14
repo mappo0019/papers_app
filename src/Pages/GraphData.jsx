@@ -74,4 +74,4 @@ import "../styles/UserList.css";
   }
   
   export default GraphData;
-  //<Graph width="2500" height="2000" nodes = {nodes} links = {links}></Graph>
+  //https://nivo.rocks/network/

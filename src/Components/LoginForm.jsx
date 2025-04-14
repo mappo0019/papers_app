@@ -22,6 +22,7 @@ export function LoginForm(){
                     let promise2 = await fetch(`http://localhost:5154/api/users/us?name=${user}`);
                     let result2 =await promise2.json();
                     var rol = await result2.rol;
+                    console.log(result2);
                     if(rol){
                         navigate(`/creator_main/${await result2.Id}`);  
                     }

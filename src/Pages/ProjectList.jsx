@@ -53,4 +53,3 @@ import "../styles/ProjectList.css";
   
   export default ProjectList; 
   
-  //<Graph width="2500" height="2000" nodes = {data.authors} links = {data.relationship}></Graph>

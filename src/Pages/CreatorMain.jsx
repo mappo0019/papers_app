@@ -94,6 +94,7 @@ function CreatorMain() {
               const new_user={
                 Id: participa.id,
                 name: participa.name,
+                rol:true,
                 openAlex_id:participa.openAlex_id,
                 project:[...main.project, idProject],
                 coworkers:cow,
@@ -174,21 +175,6 @@ function CreatorMain() {
         const good = await posting.json();
         console.log(good);
 
-        alert("Proyecto creado con éxito");
-
-        for (let i = 0; i < participantes.length; i++){
-        await fetchData(currentPage, participantes[i].openAlex_id);
-        }
-        for (let j = 0; j < graphDatas.length; j++){
-          const posting = await fetch("http://localhost:5154/api/graphData", {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json; charset=UTF-8' },
-            body: JSON.stringify(graphDatas[j]),
-          })
-  
-          const good = await posting.json();
-          console.log(good);
-        } 
         alert("Proyecto creado con éxito");
       }
         
