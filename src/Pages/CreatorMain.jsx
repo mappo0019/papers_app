@@ -200,18 +200,9 @@ function CreatorMain() {
                 Ident: generarHex24(),
                 id: await authors[j].author.display_name,
                 height: 1,
-                size: 24,
+                size: 10,
                 color:"rgb(97, 205, 187)"
               }         
-
-                for (var l = 0; l < nodes.length; l++){
-                  const new_link = {
-                    source: nodes[l].id,
-                    target: await authors[j].author.display_name,
-                    distance: 50,
-                  }
-                  links.push(await new_link);
-                }
                 nodes.push(await new_node);
             }
 

@@ -15,8 +15,6 @@ import { ResponsiveNetwork } from '@nivo/network'
   var cont = 0;
   const [data3, setData] = useState({});
 
-  var render = false;
-
   var newnode = true;
      
     const fetchData = async () => {
@@ -29,7 +27,7 @@ import { ResponsiveNetwork } from '@nivo/network'
         } catch (error) {
           console.error("Error fetching data:", error);
         } 
-            for (var i = 0; i < 20; i++){
+            for (var i = 0; i < data.length; i++){
               var graphData = await data[i];
   
               for (var j = 0; j < await graphData.authors.length; j++){               
@@ -45,7 +43,7 @@ import { ResponsiveNetwork } from '@nivo/network'
                       const new_link = {
                       source: await graphData.authors[l].id,
                       target: await graphData.authors[j].id,
-                      distance: 100,
+                      distance: 200,
                     }
                     links.push(await new_link);
                     }
@@ -55,12 +53,13 @@ import { ResponsiveNetwork } from '@nivo/network'
                 }
                 else{
                   nodes.forEach(async (element) =>{
-                    if(element.id == await graphData.authors[j].id)
-                      element.size = element.size +1;
-                  })
-                  links.forEach(async (element) =>{
-                    if((element.target == await graphData.authors[j].id ) || (element.source == await graphData.authors[j].id))
-                      element.distance= element.distance+10;
+                    if(element.id == await graphData.authors[j].id){
+                      if(element.size < 60)
+                      element.size = element.size +2;
+                      else{
+                        element.color = "rgb(255,0,0)"
+                      }
+                    }
                   })
             }
           }
@@ -82,7 +81,6 @@ import { ResponsiveNetwork } from '@nivo/network'
 
 
     if(data3.nodes != null){
-      console.log(data3)
       return (
         <>
         <h3>Papers de {id}  </h3>              
@@ -115,7 +113,6 @@ import { ResponsiveNetwork } from '@nivo/network'
       );
     }  
       else{
-        render = true;
         return(
           <>
           <p>Cargando Grafo...</p>
