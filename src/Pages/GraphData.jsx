@@ -29,7 +29,7 @@ import { ResponsiveNetwork } from '@nivo/network'
         } catch (error) {
           console.error("Error fetching data:", error);
         } 
-            for (var i = 0; i < await data.length; i++){
+            for (var i = 0; i < 20; i++){
               var graphData = await data[i];
   
               for (var j = 0; j < await graphData.authors.length; j++){               
@@ -40,12 +40,12 @@ import { ResponsiveNetwork } from '@nivo/network'
                     newnode = false;
                
                 if(newnode){           
-                   for (var l = 0; l < await nodes.length; l++){
-                    if(await nodes[l].id !== await graphData.authors[j].id){
+                   for (var l = 0; l < await graphData.authors.length; l++){
+                    if(await graphData.authors[l].id !== await graphData.authors[j].id){
                       const new_link = {
-                      source: await nodes[l].id,
+                      source: await graphData.authors[l].id,
                       target: await graphData.authors[j].id,
-                      distance: 50,
+                      distance: 100,
                     }
                     links.push(await new_link);
                     }
@@ -58,6 +58,10 @@ import { ResponsiveNetwork } from '@nivo/network'
                     if(element.id == await graphData.authors[j].id)
                       element.size = element.size +1;
                   })
+                  links.forEach(async (element) =>{
+                    if((element.target == await graphData.authors[j].id ) || (element.source == await graphData.authors[j].id))
+                      element.distance= element.distance+10;
+                  })
             }
           }
         }
@@ -66,7 +70,7 @@ import { ResponsiveNetwork } from '@nivo/network'
           "nodes": nodes,
           "links": links
         }))
-         
+
       };
 
     useEffect(() => {
