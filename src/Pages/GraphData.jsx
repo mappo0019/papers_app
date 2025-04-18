@@ -6,23 +6,31 @@ import "../styles/UserList.css";
 import { ResponsiveNetwork } from '@nivo/network'
 
  function GraphData(props) {
-    const {id} = useParams();
+    const {id, type} = useParams();
+
 
   var data = [];
   var nodes = [];
   var links = [];
 
   var cont = 0;
-  const [data3, setData] = useState({});
+  const [data2, setData] = useState({});
 
   var newnode = true;
      
     const fetchData = async () => {
      try {
-         
-          const response = await fetch(`http://localhost:5154/api/graphData/us?user=A5091562570`);
+         if(type === "user"){
+          const response = await fetch(`http://localhost:5154/api/graphData/us?user=${id}`);
           const result = await response.json();
           data = await result;
+         }
+         else{
+          const response = await fetch(`http://localhost:5154/api/graphData`);
+          const result = await response.json();
+          data = await result;
+         }
+          
     
         } catch (error) {
           console.error("Error fetching data:", error);
@@ -80,13 +88,13 @@ import { ResponsiveNetwork } from '@nivo/network'
     }, []);
 
 
-    if(data3.nodes != null){
+    if(data2.nodes != null){
       return (
         <>
         <h3>Papers de {id}  </h3>              
               <div className="graph-cont">
               <ResponsiveNetwork 
-                data={data3} 
+                data={data2} 
                 margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
                 linkDistance={e=>e.distance}
                 centeringStrength={0.3}

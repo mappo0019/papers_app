@@ -129,6 +129,7 @@ function CreatorMain() {
 
         const good1 = await posting1.json();
         console.log(good1);
+        
       
         //POST PAPERS
         for (let i = 0; i < participantes.length; i++){
@@ -139,8 +140,6 @@ function CreatorMain() {
           hasMore = true;
 
           await fetchData(currentPage, participantes[i].openAlex_id);
-          
-        }
 
           for (let j = 0; j < graphDatas.length; j++){
             const posting = await fetch("http://localhost:5154/api/graphData", {
@@ -152,8 +151,8 @@ function CreatorMain() {
             const good = await posting.json();
             console.log(good);
           } 
-            
-        
+          
+        }
 
         for (var k = 0; k < papers.length; k++){
           papers[k] = JSON.stringify(papers[k]);
@@ -175,6 +174,8 @@ function CreatorMain() {
         const good = await posting.json();
         console.log(good);
 
+        
+
         alert("Proyecto creado con éxito");
       }
         
@@ -182,13 +183,11 @@ function CreatorMain() {
 
     async function fetchData(page, userId){
       try {
-          
+
         const response = await fetch(`https://api.openalex.org/works?filter=author.id:${userId}&page=${page}`);
         const result = await response.json();
 
-
-        if(await result.results){
-
+        if(await result.meta.count > currentPage-1* itemsPerPage){
         for(let i = 0; i < await result.results.length; i++){
             nodes = [];
             links = [];
