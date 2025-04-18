@@ -19,59 +19,119 @@ import { ResponsiveNetwork } from '@nivo/network'
   var newnode = true;
      
     const fetchData = async () => {
-     try {
-         if(type === "user"){
-          const response = await fetch(`http://localhost:5154/api/graphData/us?user=${id}`);
-          const result = await response.json();
-          data = await result;
-         }
-         else{
-          const response = await fetch(`http://localhost:5154/api/graphData`);
-          const result = await response.json();
-          data = await result;
-         }
-          
-    
+    if(type === "user"){
+      try {
+        const response = await fetch(`http://localhost:5154/api/graphData/us?user=${id}`);
+        const result = await response.json();
+        data = await result;
+
         } catch (error) {
           console.error("Error fetching data:", error);
         } 
-            for (var i = 0; i < data.length; i++){
-              var graphData = await data[i];
+        for (var i = 0; i < data.length; i++){
+          var graphData = await data[i];
   
-              for (var j = 0; j < await graphData.authors.length; j++){               
-                newnode = true;
+          for (var j = 0; j < await graphData.authors.length; j++){               
+            newnode = true;
                
-                for(var k = 0; k < nodes.length; k++)
-                  if(nodes[k].id === await graphData.authors[j].id)
-                    newnode = false;
+            for(var k = 0; k < nodes.length; k++)
+              if(nodes[k].id === await graphData.authors[j].id)
+                newnode = false;
                
-                if(newnode){           
-                   for (var l = 0; l < await graphData.authors.length; l++){
-                    if(await graphData.authors[l].id !== await graphData.authors[j].id){
-                      const new_link = {
-                      source: await graphData.authors[l].id,
-                      target: await graphData.authors[j].id,
-                      distance: 200,
-                    }
-                    links.push(await new_link);
-                    }
-                    
-                  }
-                  nodes.push(await graphData.authors[j]);
+            if(newnode){           
+                for (var l = 0; l < await graphData.authors.length; l++){
+                if(await graphData.authors[l].id !== await graphData.authors[j].id){
+                  const new_link = {
+                  source: await graphData.authors[l].id,
+                  target: await graphData.authors[j].id,
+                  distance: 200,
                 }
-                else{
-                  nodes.forEach(async (element) =>{
-                    if(element.id == await graphData.authors[j].id){
-                      if(element.size < 60)
-                      element.size = element.size +2;
-                      else{
-                        element.color = "rgb(255,0,0)"
-                      }
-                    }
-                  })
+                links.push(await new_link);
+                }
+                    
+              }
+              nodes.push(await graphData.authors[j]);
+            }
+            else{
+              nodes.forEach(async (element) =>{
+                if(element.id == await graphData.authors[j].id){
+                  if(element.size < 60)
+                  element.size = element.size +2;
+                  else{
+                    element.color = "rgb(255,0,0)"
+                  }
+                }
+              })
             }
           }
         }
+    }
+    else{
+      try{
+        let promise = await fetch(`http://localhost:5154/api/projects/${id}`);
+        let result_users =await promise.json();
+        let users = await result_users.participantes;
+        let openAlexIds = [];
+
+        for(let i = 0; i < users.length; i++){
+          let promise = await fetch(`http://localhost:5154/api/users/${users[i]}`);
+          let result =await promise.json();
+          openAlexIds.push(await result.openAlex_id)
+        }
+
+        for(let i = 0; i < await openAlexIds.length; i++){
+          const response = await fetch(`http://localhost:5154/api/graphData/us?user=${openAlexIds[i]}`);
+          const result = await response.json();
+          data.push(await result);
+        }
+        
+       }catch (error) {
+        console.error("Error fetching data:", error);
+      } 
+
+      for(let a = 0; a < data.length; a++){
+        var dat = data[a] 
+      for (var i = 0; i < dat.length; i++){
+        var graphData = await dat[i];
+
+        for (var j = 0; j < await graphData.authors.length; j++){               
+          newnode = true;
+             
+          for(var k = 0; k < nodes.length; k++)
+            if(nodes[k].id === await graphData.authors[j].id)
+              newnode = false;
+             
+          if(newnode){           
+              for (var l = 0; l < await graphData.authors.length; l++){
+              if(await graphData.authors[l].id !== await graphData.authors[j].id){
+                const new_link = {
+                source: await graphData.authors[l].id,
+                target: await graphData.authors[j].id,
+                distance: 200,
+              }
+              links.push(await new_link);
+              }
+                  
+            }
+            nodes.push(await graphData.authors[j]);
+          }
+          else{
+            nodes.forEach(async (element) =>{
+              if(element.id == await graphData.authors[j].id){
+                if(element.size < 60)
+                element.size = element.size +2;
+                else{
+                  element.color = "rgb(255,0,0)"
+                }
+              }
+            })
+          }
+        }
+      }
+    }
+  }
+        
+     
         
         setData(data3=>({
           "nodes": nodes,

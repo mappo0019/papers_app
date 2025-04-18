@@ -43,7 +43,7 @@ import "../styles/ProjectList.css";
             {data.length === 0 ? 
             (<p> Este usuario no ha publicado ningún paper en OpenAlex</p>) : 
             data.map((resp)=>(
-              <li>{resp.title} <a href={`/graph_data/_/project`}> Enlace </a> </li> 
+              <li>{resp.title} <a href={`/graph_data/${id}/project`}> Enlace </a> </li> 
             ))}
         </div>
       </>
