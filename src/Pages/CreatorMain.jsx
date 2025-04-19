@@ -247,9 +247,13 @@ function CreatorMain() {
       }
     }
 
-    function addUser(){
+    async function addUser(){
       if (userNombre != "" && userId != ""){
-        setParticipantes([...participantes, {id: generarHex24(), name: userNombre, openAlex_id: userId}]);
+        const response = await fetch(`https://api.openalex.org/people/${userId}`);
+        if (response.status == 200)
+          setParticipantes([...participantes, {id: generarHex24(), name: userNombre, openAlex_id: userId}]);
+        else
+          alert("Error al añadir usuario, este usuario no existe en OpenAlex");
       }
       else{
         alert("Error al añadir usuario, todos los campos deben rellenarse");
@@ -279,10 +283,19 @@ function CreatorMain() {
           <Boton name="X" onClickAlto={handleClose}/>
 
           {participantes.map((participa)=>(
+            participa.id != id ?
             <>
               <li>{participa.name}</li>
               <Boton name="Eliminar Usuario" onClickAlto={()=> deleteUser(participa.openAlex_id)}/>
             </>
+            :
+            <>
+            <br></br>
+            <li>{participa.name}</li>
+            <br></br>
+            </>
+            
+
           ))}
           <form >
             <input type="text" placeholder="Introduzca el Nombre del Investigador..." onKeyUp={(e) => setUserNombre(e.target.value)}/>

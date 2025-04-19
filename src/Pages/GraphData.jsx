@@ -15,6 +15,7 @@ import { ResponsiveNetwork } from '@nivo/network'
 
   var cont = 0;
   const [data2, setData] = useState({});
+  const [name, setName] = useState("");
 
   var newnode = true;
      
@@ -107,7 +108,7 @@ import { ResponsiveNetwork } from '@nivo/network'
                 const new_link = {
                 source: await graphData.authors[l].id,
                 target: await graphData.authors[j].id,
-                distance: 200,
+                distance: 150,
               }
               links.push(await new_link);
               }
@@ -142,16 +143,40 @@ import { ResponsiveNetwork } from '@nivo/network'
 
     useEffect(() => {
       cont++;
-      if(cont==1)
-      fetchData();
-      
+      if(cont==1){
+        fetchData();
+        getName();
+      }  
     }, []);
 
+    async function getName(){
+      if(type==="user"){
+        try {
+          const response = await fetch(`http://localhost:5154/api/users/open?id=${id}`);
+          const result = await response.json();
+          setName(await result.name);
+  
+          } catch (error) {
+            console.error("Error fetching data:", error);
+          } 
+      }
+      else{
+        try {
+          const response = await fetch(`http://localhost:5154/api/projects/${id}`);
+          const result = await response.json();
+          setName(await result.name);
+  
+          } catch (error) {
+            console.error("Error fetching data:", error);
+          } 
+      }
+    }
 
-    if(data2.nodes != null){
+
+    if(data2.nodes != null &&  name !== ""){
       return (
         <>
-        <h3>Papers de {id}  </h3>              
+        <h3>Papers de {name}  </h3>              
               <div className="graph-cont">
               <ResponsiveNetwork 
                 data={data2} 
