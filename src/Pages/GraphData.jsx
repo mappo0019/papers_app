@@ -8,7 +8,7 @@ import { ResponsiveNetwork } from '@nivo/network'
  function GraphData(props) {
     const {id, type} = useParams();
 
-
+///////////////////////////////777ALGO PASA CUANDO PONES MAS MIEMBROS EN UN PROYECTO
   var data = [];
   var nodes = [];
   var links = [];
