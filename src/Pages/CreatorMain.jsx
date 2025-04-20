@@ -54,8 +54,7 @@ function CreatorMain() {
       if(nombre === ""){
         alert("El Proyecto debe de tener un Nombre");
       }
-      else{
-       
+      else{ 
         //ACTUALIZAR USERS
         participantes.map((participa)=>{
           participantesId.push(participa.id);
@@ -65,6 +64,8 @@ function CreatorMain() {
         participantes.map(async(participa)=>{
 
             var new_participantesId = participantesId.filter(a=> a != participa.id); 
+
+
 
             if(participa.id != main.Id){
             //AÑADIR NUEVOS
@@ -174,8 +175,6 @@ function CreatorMain() {
         const good = await posting.json();
         console.log(good);
 
-        
-
         alert("Proyecto creado con éxito");
       }
         
@@ -183,6 +182,19 @@ function CreatorMain() {
 
     async function fetchData(page, userId){
       try {
+
+        const resp = await fetch(`http://localhost:5154/api/graphData/us?user=${userId}`);
+        const res = await resp.json();
+        if(await res.length !== 0){
+          for (let a = 0; a < res.length; a++){
+            fetch(`http://localhost:5154/api/graphData/${res[a].Id}`, {
+              method: 'DELETE',
+            })
+            .then(res => res.text()) // or res.json()
+            .then(res => console.log(res))
+          }
+          
+        }
 
         const response = await fetch(`https://api.openalex.org/works?filter=author.id:${userId}&page=${page}`);
         const result = await response.json();
@@ -250,8 +262,22 @@ function CreatorMain() {
     async function addUser(){
       if (userNombre != "" && userId != ""){
         const response = await fetch(`https://api.openalex.org/people/${userId}`);
-        if (response.status == 200)
-          setParticipantes([...participantes, {id: generarHex24(), name: userNombre, openAlex_id: userId}]);
+        if (response.status == 200){
+          try{
+            const response2 = await fetch(`https://localhost:5154/api/users/open?id=${userId}`)
+            if(response2.status == 200){
+              const result = await response2.json();
+              console.log(result);
+              setParticipantes([...participantes, {id: await result.Id, name: await result.name, openAlex_id: await result.openAlex_id}]);
+            }     
+            else
+              setParticipantes([...participantes, {id: generarHex24(), name: userNombre, openAlex_id: userId}]);
+          }catch(error){
+            console.error("Error fetching data:", error);
+          }
+          
+          
+        }     
         else
           alert("Error al añadir usuario, este usuario no existe en OpenAlex");
       }
