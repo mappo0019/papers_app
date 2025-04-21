@@ -65,14 +65,16 @@ function CreatorMain() {
 
             var new_participantesId = participantesId.filter(a=> a != participa.id); 
 
+            const response = await fetch(`http://localhost:5154/api/users/open?id=${participa.openAlex_id}`);
+            const result = await response.json();
+            if(response.status != 200){
 
-
-            if(participa.id != main.Id){
             //AÑADIR NUEVOS
               const new_user={
                 Id: participa.id,
                 name: participa.name,
                 openAlex_id:participa.openAlex_id,
+                rol: true,
                 project:[idProject],
                 coworkers:new_participantesId,
               }
@@ -88,20 +90,30 @@ function CreatorMain() {
               
             }
             else{
-
-              //ACTUALIZAR MAIN
-              var cow = [...main.coworkers, ...new_participantesId];
+              var cow = result.coworkers;
+              for(let a = 0; a < new_participantesId.length; a++){
+                var repetido = false;
+                for(let b = 0; b < result.coworkers.length; b++){
+                  if(new_participantesId[a] === result.coworkers[b])
+                    repetido = true;
+                }
+                if (!repetido){
+                  cow.push(new_participantesId[a]);
+                }
+              }
 
               const new_user={
-                Id: participa.id,
-                name: participa.name,
-                rol:true,
-                openAlex_id:participa.openAlex_id,
+                Id: result.Id,
+                name: result.name,
+                rol:result.rol,
+                openAlex_id:result.openAlex_id,
                 project:[...main.project, idProject],
                 coworkers:cow,
               }
 
-              fetch(`http://localhost:5154/api/users/${main.Id}`, {
+              console.log(new_user)
+
+              fetch(`http://localhost:5154/api/users/${result.Id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json; charset=UTF-8' },
                 body: JSON.stringify(new_user),
@@ -174,6 +186,7 @@ function CreatorMain() {
 
         const good = await posting.json();
         console.log(good);
+        
 
         alert("Proyecto creado con éxito");
       }
@@ -261,13 +274,18 @@ function CreatorMain() {
 
     async function addUser(){
       if (userNombre != "" && userId != ""){
-        const response = await fetch(`https://api.openalex.org/people/${userId}`);
+        var repe = false;
+        for(let i = 0; i < participantes.length; i++){
+          if(userId === participantes[i].openAlex_id)
+            repe = true;
+        }
+        if(!repe){
+          const response = await fetch(`https://api.openalex.org/people/${userId}`);
         if (response.status == 200){
           try{
             const response2 = await fetch(`http://localhost:5154/api/users/open?id=${userId}`)
             if(response2.status == 200){
               const result = await response2.json();
-              console.log(result);
               setParticipantes([...participantes, {id: await result.Id, name: await result.name, openAlex_id: await result.openAlex_id}]);
             }     
             else
@@ -280,6 +298,10 @@ function CreatorMain() {
         }     
         else
           alert("Error al añadir usuario, este usuario no existe en OpenAlex");
+        }
+        else
+          alert("Este usuario ya ha sido añadido al proyecto")
+        
       }
       else{
         alert("Error al añadir usuario, todos los campos deben rellenarse");

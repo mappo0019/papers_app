@@ -171,7 +171,6 @@ import { ResponsiveNetwork } from '@nivo/network'
 
 
     if(data2.nodes != null &&  name !== ""){
-      console.log(data2.nodes)
       return (
         <>
         <h3>Papers de {name}  </h3>              
