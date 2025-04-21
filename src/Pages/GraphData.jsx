@@ -8,7 +8,6 @@ import { ResponsiveNetwork } from '@nivo/network'
  function GraphData(props) {
     const {id, type} = useParams();
 
-///////////////////////////////777ALGO PASA CUANDO PONES MAS MIEMBROS EN UN PROYECTO
   var data = [];
   var nodes = [];
   var links = [];
@@ -132,9 +131,7 @@ import { ResponsiveNetwork } from '@nivo/network'
     }
   }
         
-     
-        
-        setData(data3=>({
+        setData(data2=>({
           "nodes": nodes,
           "links": links
         }))
@@ -174,6 +171,7 @@ import { ResponsiveNetwork } from '@nivo/network'
 
 
     if(data2.nodes != null &&  name !== ""){
+      console.log(data2.nodes)
       return (
         <>
         <h3>Papers de {name}  </h3>              

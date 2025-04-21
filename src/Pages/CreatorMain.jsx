@@ -264,7 +264,7 @@ function CreatorMain() {
         const response = await fetch(`https://api.openalex.org/people/${userId}`);
         if (response.status == 200){
           try{
-            const response2 = await fetch(`https://localhost:5154/api/users/open?id=${userId}`)
+            const response2 = await fetch(`http://localhost:5154/api/users/open?id=${userId}`)
             if(response2.status == 200){
               const result = await response2.json();
               console.log(result);
