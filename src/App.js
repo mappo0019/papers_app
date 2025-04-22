@@ -18,7 +18,7 @@ function App() {
         <Route path="watcher_users/:id" element={<WatcherUsers />} />
         <Route path="user_list/:id" element={<UserList />} />
         <Route path="project_list/:id" element={<ProjectList />} />
-        <Route path="graph_data/:id/:type" element={<GraphData />} />
+        <Route path="graph_data/:id/:type/:dates" element={<GraphData />} />
 
       </Routes>
     </BrowserRouter>

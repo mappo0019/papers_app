@@ -24,7 +24,7 @@ function WatcherMain() {
           <div>
           {response.map((resp)=>(
             <>
-            <FichaProyecto name ={resp.name} route1 = {`/watcher_users/${resp.Id}`} route2 = {`/graph_data/${resp.Id}/project`}/>
+            <FichaProyecto name ={resp.name} route1 = {`/watcher_users/${resp.Id}`} route2 = {`/graph_data/${resp.Id}/project/-`}/>
             </>
                   
                 ))}

@@ -6,7 +6,7 @@ import "../styles/UserList.css";
 import { ResponsiveNetwork } from '@nivo/network'
 
  function GraphData(props) {
-    const {id, type} = useParams();
+    const {id, type, dates} = useParams();
 
   var data = [];
   var nodes = [];
@@ -20,14 +20,29 @@ import { ResponsiveNetwork } from '@nivo/network'
      
     const fetchData = async () => {
     if(type === "user"){
-      try {
+      if(dates !== "-"){
+        let fecha1 = parseInt(dates.substring(0, dates.indexOf("-")));
+        let fecha2 = parseInt(dates.substring(dates.indexOf("-")+1));
+        try {
+          const response = await fetch(`http://localhost:5154/api/graphData/us?user=${id}&date1=${fecha1}&date2=${fecha2}`);
+          const result = await response.json();
+          data = await result;
+  
+          } catch (error) {
+            console.error("Error fetching data:", error);
+          } 
+      }
+      else{
+        try {
         const response = await fetch(`http://localhost:5154/api/graphData/us?user=${id}`);
         const result = await response.json();
         data = await result;
 
         } catch (error) {
           console.error("Error fetching data:", error);
-        } 
+        }
+      }
+       
         for (var i = 0; i < data.length; i++){
           var graphData = await data[i];
   
@@ -66,7 +81,7 @@ import { ResponsiveNetwork } from '@nivo/network'
           }
         }
     }
-    else{
+    else if(type === "project"){
       try{
         let promise = await fetch(`http://localhost:5154/api/projects/${id}`);
         let result_users =await promise.json();
@@ -79,12 +94,22 @@ import { ResponsiveNetwork } from '@nivo/network'
           openAlexIds.push(await result.openAlex_id)
         }
 
-        for(let i = 0; i < await openAlexIds.length; i++){
+        if(dates !== "-"){
+          let fecha1 = parseInt(dates.substring(0,dates.indexOf("-")));
+          let fecha2 = parseInt(dates.substring(dates.indexOf("-")+1));
+            for(let i = 0; i < await openAlexIds.length; i++){
+              const response = await fetch(`http://localhost:5154/api/graphData/us?user=${openAlexIds[i]}&date1=${fecha1}&date2=${fecha2}`);
+              const result = await response.json();
+              data.push(await result);
+              }
+        }
+        else{
+          for(let i = 0; i < await openAlexIds.length; i++){
           const response = await fetch(`http://localhost:5154/api/graphData/us?user=${openAlexIds[i]}`);
           const result = await response.json();
           data.push(await result);
-        }
-        
+          }
+        }   
        }catch (error) {
         console.error("Error fetching data:", error);
       } 

@@ -111,8 +111,6 @@ function CreatorMain() {
                 coworkers:cow,
               }
 
-              console.log(new_user)
-
               fetch(`http://localhost:5154/api/users/${result.Id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json; charset=UTF-8' },
@@ -203,7 +201,7 @@ function CreatorMain() {
             fetch(`http://localhost:5154/api/graphData/${res[a].Id}`, {
               method: 'DELETE',
             })
-            .then(res => res.text()) // or res.json()
+            .then(res => res.text())
             .then(res => console.log(res))
           }
           
@@ -217,6 +215,7 @@ function CreatorMain() {
             nodes = [];
             links = [];
             let authors = await result.results[i].authorships;
+            let year = await result.results[i].publication_year;
 
             for(let j = 0; j < await authors.length; j++){
 
@@ -233,6 +232,7 @@ function CreatorMain() {
             const new_graph_data = {
               Id: generarHex24(),
               user: await userId.toUpperCase(),
+              year: await year,
               authors: await nodes,
               relationship: await links
             }
