@@ -74,16 +74,13 @@ import { ResponsiveNetwork } from '@nivo/network'
                 if(element.id == await graphData.authors[j].id){
                   if(element.size < 60)
                   element.size = element.size +2;
-                  else{
-                    element.color = "rgb(255,0,0)"
-                  }
                 }
               })
             }
           }
         }
     }
-    else if(type === "project" || type == "justusers"){
+    else if(type === "project"){
       try{
         let promise = await fetch(`http://localhost:5154/api/projects/${id}`);
         let result_users =await promise.json();
@@ -94,7 +91,6 @@ import { ResponsiveNetwork } from '@nivo/network'
           let promise = await fetch(`http://localhost:5154/api/users/${users[i]}`);
           let result =await promise.json();
           openAlexIds.push(await result.openAlex_id);
-          names.push(await result.name);
         }
 
         if(dates !== "-"){
@@ -125,16 +121,6 @@ import { ResponsiveNetwork } from '@nivo/network'
 
         for (var j = 0; j < await graphData.authors.length; j++){               
           newnode = true;
-          usable = true;
-          if(type == "justusers"){
-            usable = false;
-            for(var b = 0; b < names.length; b++){
-              if(await graphData.authors[j].id == names[b])
-                usable = true;
-            }
-          }
-           
-          if(usable){
             for(var k = 0; k < nodes.length; k++)
             if(nodes[k].id === await graphData.authors[j].id)
               newnode = false;
@@ -161,11 +147,94 @@ import { ResponsiveNetwork } from '@nivo/network'
               }
             })
           }
+        }          
+      }
+    }
+  }
+  else if (type === "justusers"){
+    try{
+      let promise = await fetch(`http://localhost:5154/api/projects/${id}`);
+      let result_users =await promise.json();
+      let users = await result_users.participantes;
+      let openAlexIds = [];
+
+      for(let i = 0; i < users.length; i++){
+        let promise = await fetch(`http://localhost:5154/api/users/${users[i]}`);
+        let result =await promise.json();
+        openAlexIds.push(await result.openAlex_id);
+        names.push(await result.name);
+      }
+
+      if(dates !== "-"){
+        let fecha1 = parseInt(dates.substring(0,dates.indexOf("-")));
+        let fecha2 = parseInt(dates.substring(dates.indexOf("-")+1));
+          for(let i = 0; i < await openAlexIds.length; i++){
+            const response = await fetch(`http://localhost:5154/api/graphData/us?user=${openAlexIds[i]}&date1=${fecha1}&date2=${fecha2}`);
+            const result = await response.json();
+            data.push(await result);
+            }
+      }
+      else{
+        for(let i = 0; i < await openAlexIds.length; i++){
+        const response = await fetch(`http://localhost:5154/api/graphData/us?user=${openAlexIds[i]}`);
+        const result = await response.json();
+        data.push(await result);
         }
-          
+      }   
+     }catch (error) {
+      console.error("Error fetching data:", error);
+    } 
+
+    for(let a = 0; a < data.length; a++){
+      var dat = data[a] 
+    for (var i = 0; i < dat.length; i++){
+      var graphData = await dat[i];
+
+      for (var j = 0; j < await graphData.authors.length; j++){               
+        newnode = true;
+        usable = true;
+          if(type === "justusers"){
+            usable = false;
+            for(var b = 0; b < names.length; b++){
+              if(await graphData.authors[j].id === names[b])
+                usable = true;
+            }
+          }
+          if(usable){
+            for(var k = 0; k < nodes.length; k++)
+              if(nodes[k].id === await graphData.authors[j].id)
+                newnode = false;
+
+            if(newnode){ 
+              for (var l = 0; l < await graphData.authors.length; l++){
+                for(var c = 0; c < names.length; c++){
+                  if(await graphData.authors[l].id === names[c] && 
+                    await graphData.authors[l].id !== await graphData.authors[j].id){
+                      const new_link = {
+                      source: await graphData.authors[l].id,
+                      target: await graphData.authors[j].id,
+                      distance: 150,
+                    }
+                    links.push(await new_link);
+                    }                   
+                }
+                    
+              }
+              nodes.push(await graphData.authors[j]);
+            }
+            else{
+              nodes.forEach(async (element) =>{
+                if(element.id == await graphData.authors[j].id){
+                  if(element.size < 60)
+                  element.size = element.size +2;
+                }
+              })
+            }
+          }
         }
       }
     }
+    console.log(nodes);
   }
         
         setData(data2=>({
