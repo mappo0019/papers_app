@@ -31,7 +31,6 @@ function CreatorMain() {
     var hasMore = true;
     var currentPage = 1;
     var newpaper = true;
-    var newnode = true;
 
     useEffect(()=>{
         const getUser = async ()=>{
@@ -107,7 +106,7 @@ function CreatorMain() {
                 name: result.name,
                 rol:result.rol,
                 openAlex_id:result.openAlex_id,
-                project:[...main.project, idProject],
+                project:[...result.project, idProject],
                 coworkers:cow,
               }
 
@@ -218,13 +217,21 @@ function CreatorMain() {
             let year = await result.results[i].publication_year;
 
             for(let j = 0; j < await authors.length; j++){
-
+              var color = "rgb(97, 205, 187)";
+              if(await authors[j].author.display_name == main.name)
+                color = "rgb(255, 0, 0)";
+              else{
+                for(let c = 0; c < participantes.length; c++){
+                  if (await authors[j].author.display_name == participantes[c].name)
+                    color = "rgb(255, 115, 0)";
+                }
+              }
               const new_node = {
                 Ident: generarHex24(),
                 id: await authors[j].author.display_name,
                 height: 1,
                 size: 10,
-                color:"rgb(97, 205, 187)"
+                color: color
               }         
                 nodes.push(await new_node);
             }

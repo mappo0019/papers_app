@@ -11,12 +11,14 @@ import { ResponsiveNetwork } from '@nivo/network'
   var data = [];
   var nodes = [];
   var links = [];
+  let names = [];
 
   var cont = 0;
   const [data2, setData] = useState({});
   const [name, setName] = useState("");
 
   var newnode = true;
+  var usable = true;
      
     const fetchData = async () => {
     if(type === "user"){
@@ -81,7 +83,7 @@ import { ResponsiveNetwork } from '@nivo/network'
           }
         }
     }
-    else if(type === "project"){
+    else if(type === "project" || type == "justusers"){
       try{
         let promise = await fetch(`http://localhost:5154/api/projects/${id}`);
         let result_users =await promise.json();
@@ -91,7 +93,8 @@ import { ResponsiveNetwork } from '@nivo/network'
         for(let i = 0; i < users.length; i++){
           let promise = await fetch(`http://localhost:5154/api/users/${users[i]}`);
           let result =await promise.json();
-          openAlexIds.push(await result.openAlex_id)
+          openAlexIds.push(await result.openAlex_id);
+          names.push(await result.name);
         }
 
         if(dates !== "-"){
@@ -114,6 +117,7 @@ import { ResponsiveNetwork } from '@nivo/network'
         console.error("Error fetching data:", error);
       } 
 
+
       for(let a = 0; a < data.length; a++){
         var dat = data[a] 
       for (var i = 0; i < dat.length; i++){
@@ -121,8 +125,17 @@ import { ResponsiveNetwork } from '@nivo/network'
 
         for (var j = 0; j < await graphData.authors.length; j++){               
           newnode = true;
-             
-          for(var k = 0; k < nodes.length; k++)
+          usable = true;
+          if(type == "justusers"){
+            usable = false;
+            for(var b = 0; b < names.length; b++){
+              if(await graphData.authors[j].id == names[b])
+                usable = true;
+            }
+          }
+           
+          if(usable){
+            for(var k = 0; k < nodes.length; k++)
             if(nodes[k].id === await graphData.authors[j].id)
               newnode = false;
              
@@ -145,12 +158,11 @@ import { ResponsiveNetwork } from '@nivo/network'
               if(element.id == await graphData.authors[j].id){
                 if(element.size < 60)
                 element.size = element.size +2;
-                else{
-                  element.color = "rgb(255,0,0)"
-                }
               }
             })
           }
+        }
+          
         }
       }
     }
