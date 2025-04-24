@@ -1,6 +1,5 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import {Graph} from "../Components/Graph.tsx";
 import "../styles/ProjectList.css";
 
  function ProjectList(props) {

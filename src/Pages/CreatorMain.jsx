@@ -23,7 +23,9 @@ function CreatorMain() {
 
     const itemsPerPage = 25;
 
-    var papers = [];
+    var proj_papers = [];
+    var user_papers = [];
+    var all_users_papers = [];
     var graphDatas = [];
     var participantesId = [];
     var nodes = [];
@@ -72,6 +74,7 @@ function CreatorMain() {
               const new_user={
                 Id: participa.id,
                 name: participa.name,
+                username: participa.username,
                 openAlex_id:participa.openAlex_id,
                 rol: true,
                 project:[idProject],
@@ -104,6 +107,7 @@ function CreatorMain() {
               const new_user={
                 Id: result.Id,
                 name: result.name,
+                username: result.username,
                 rol:result.rol,
                 openAlex_id:result.openAlex_id,
                 project:[...result.project, idProject],
@@ -114,7 +118,7 @@ function CreatorMain() {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json; charset=UTF-8' },
                 body: JSON.stringify(new_user),
-              }).then(response => response.json())
+              }).then(response => response.text())
               .then(data => console.log(data))
               .catch(err => console.log(err))
               
@@ -146,6 +150,7 @@ function CreatorMain() {
           nodes = [];
           links = []
           graphDatas = [];
+          user_papers = [];
           currentPage = 1;
           hasMore = true;
 
@@ -164,15 +169,15 @@ function CreatorMain() {
           
         }
 
-        for (var k = 0; k < papers.length; k++){
-          papers[k] = JSON.stringify(papers[k]);
+        for (var k = 0; k < proj_papers.length; k++){
+          proj_papers[k] = JSON.stringify(proj_papers[k]);
         }
         
 
         const new_project_papers = {
           Id: generarHex24(),
           project: idProject,
-          raw: (papers)
+          raw: (proj_papers)
         }
 
         const posting = await fetch("http://localhost:5154/api/projectPapers", {
@@ -183,6 +188,17 @@ function CreatorMain() {
 
         const good = await posting.json();
         console.log(good);
+
+        for (let e =0; e < all_users_papers.length; e++){
+          const posting = await fetch("http://localhost:5154/api/papers", {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json; charset=UTF-8' },
+            body: JSON.stringify(all_users_papers[e]),
+          })
+  
+          const good = await posting.json();
+          console.log(good);
+        }
         
 
         alert("Proyecto creado con éxito");
@@ -210,6 +226,9 @@ function CreatorMain() {
         const result = await response.json();
 
         if(await result.meta.count > currentPage-1* itemsPerPage){
+
+          user_papers.push(result.results);
+
         for(let i = 0; i < await result.results.length; i++){
             nodes = [];
             links = [];
@@ -248,12 +267,12 @@ function CreatorMain() {
 
             newpaper = true;
 
-            for(var k = 0; k < papers.length; k++)
-              if(papers[k].id === await result.results[i].id)
+            for(var k = 0; k < proj_papers.length; k++)
+              if(proj_papers[k].id === await result.results[i].id)
                 newpaper = false;
                          
             if(newpaper){
-              papers.push(await result.results[i]);
+              proj_papers.push(await result.results[i]);
             }
 
         }
@@ -276,6 +295,33 @@ function CreatorMain() {
           currentPage++;
           await fetchData(currentPage, userId);
         }
+        else{
+          var stringed_papers = [];
+          for (var d = 0; d < user_papers.length; d++){
+            for(var e = 0; e < user_papers[d].length; e++)
+            stringed_papers.push(JSON.stringify(user_papers[d][e]));
+          }
+
+          const new_papers = {
+            Id: generarHex24(),
+            user: userId,
+            raw: (stringed_papers)
+          }
+
+          const response = await fetch(`http://localhost:5154/api/papers/us?user=${new_papers.user}`);
+          if(response.status === 200){
+            const result = await response.json();
+            fetch(`http://localhost:5154/api/papers/${await result.Id}`, {
+            method: 'DELETE',
+          })
+          .then(res => res.text())
+          .then(res => console.log(res))
+          }
+          
+
+          all_users_papers.push(new_papers);
+
+        }
       }
     }
 
@@ -293,10 +339,10 @@ function CreatorMain() {
             const response2 = await fetch(`http://localhost:5154/api/users/open?id=${userId}`)
             if(response2.status == 200){
               const result = await response2.json();
-              setParticipantes([...participantes, {id: await result.Id, name: await result.name, openAlex_id: await result.openAlex_id}]);
+              setParticipantes([...participantes, {id: await result.Id, name: await result.name, username: await result.username, openAlex_id: await result.openAlex_id}]);
             }     
             else
-              setParticipantes([...participantes, {id: generarHex24(), name: userNombre, openAlex_id: userId}]);
+              setParticipantes([...participantes, {id: generarHex24(), name: "Usuario Nuevo", username: userNombre, openAlex_id: userId}]);
           }catch(error){
             console.error("Error fetching data:", error);
           }

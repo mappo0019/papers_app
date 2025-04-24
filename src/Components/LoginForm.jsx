@@ -19,7 +19,7 @@ export function LoginForm(){
             
             if(loginuser.Id != null){
                 if(user === loginuser.user && passwd == loginuser.password){
-                    let promise2 = await fetch(`http://localhost:5154/api/users/us?name=${user}`);
+                    let promise2 = await fetch(`http://localhost:5154/api/users/us?username=${user}`);
                     let result2 =await promise2.json();
                     var rol = await result2.rol;
                     

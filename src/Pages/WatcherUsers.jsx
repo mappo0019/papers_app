@@ -44,7 +44,7 @@ function WatcherUsers() {
         <div>
         {users.map((resp)=>(
           <>
-            <Boton className = "" name ={resp.name} route = {`/graph_data/${resp.openAlex_id}/user/-`}></Boton>
+            <Boton className = "" name ={resp.name} route = {`/user_list/${resp.openAlex_id}`}></Boton>
             <br></br>
           </>
           
