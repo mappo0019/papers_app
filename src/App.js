@@ -7,13 +7,19 @@ import ProjectList from './Pages/ProjectList';
 import UserList from './Pages/UserList';
 import WatcherUsers from './Pages/WatcherUsers';
 import GraphData from './Pages/GraphData';
+import SignIn from './Pages/SignIn';
+import CreatorIntro from './Pages/CreatorIntro';
+import WatcherIntro from './Pages/WatcherIntro';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
+        <Route path="/sign_in" element={<SignIn/>}/>
+        <Route path="creator_intro/:id" element={<CreatorIntro />} />
         <Route path="creator_main/:id" element={<CreatorMain />} />
+        <Route path="watcher_intro/:id" element={<WatcherIntro />} />
         <Route path="watcher_main/:id" element={<WatcherMain />} />
         <Route path="watcher_users/:id" element={<WatcherUsers />} />
         <Route path="user_list/:id" element={<UserList />} />

@@ -5,9 +5,11 @@ body{
 
 .login_body{
     text-align: center;
+    
 }
 
 .login_form{
+    align-items: center;
     background-color: rgb(255, 255, 255);
     position: absolute;
     border-radius: 8px; 

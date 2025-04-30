@@ -25,10 +25,10 @@ export function LoginForm(){
                     
                     if(rol != null){
                         if(rol === true){
-                            navigate(`/creator_main/${await result2.Id}`);  
+                            navigate(`/creator_intro/${await result2.Id}`);  
                         }
                         else{
-                            navigate(`/watcher_main/${await result2.Id}`);
+                            navigate(`/watcher_intro/${await result2.Id}`);
                         }
                     }
                     else{

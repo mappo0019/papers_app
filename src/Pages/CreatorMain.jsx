@@ -370,6 +370,7 @@ function CreatorMain() {
     return (
       <>
       <form >
+        <input type="text" disabled={true} placeholder={idProject}></input>
         <input type="text" placeholder="Introduzca el Nombre del Proyecto..." onKeyUp={(e) => setNombre(e.target.value)}/>
         <input type="text" disabled={true} placeholder={main.name}></input>
         <input type="text" placeholder="Introduzca las características de su proyecto" onKeyUp={(e) => setDesc(e.target.value)}/>
