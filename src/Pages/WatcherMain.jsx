@@ -2,6 +2,7 @@ import "../styles/WatcherMain.css"
 import { useEffect, useState } from "react";
 import FichaProyecto from "../Components/FichaProyecto";
 import { useParams } from "react-router-dom";
+import Boton from "../Components/Boton";
 
 function WatcherMain() {
   
@@ -32,6 +33,7 @@ function WatcherMain() {
     return (
       <>
         <div className = "watcher-body">
+          <Boton name="Atrás" route={`/watcher_intro/${id}`}/>
           <h2>PROYECTOS A LOS QUE SIGUES</h2>
           <div>
           {response.map((resp)=>(

@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "../styles/UserList.css";
 import CompDash from "../Components/CompDash";
+import Boton from "../Components/Boton";
 
  function UserList(props) {
     const {id} = useParams();
@@ -62,6 +63,7 @@ import CompDash from "../Components/CompDash";
       return (
         <>
           <div>
+              <Boton name="Atrás" route={`/watcher_users/${id}`}/>
               <h3>Información de {name}  </h3>
 
               <CompDash name="Número de papers publicados" valor={data.length}/>

@@ -40,6 +40,7 @@ function WatcherUsers() {
   return (
     <>
       <div className = "watcher-users">
+        <Boton name="Atrás" route={`/watcher_main/${id}`}/>
         <h2>Usuarios:</h2>
         <div>
         {users.map((resp)=>(

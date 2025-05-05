@@ -8,8 +8,8 @@ export default function FichaProyecto(props){
         <>         
             <div className ="ficha_proyecto">
                 <h3>{props.name}</h3>
-                <Boton name={props.bot_name1} route = {props.route1}/>
-                <Boton name={props.bot_name2} route = {props.route2}/>
+                <Boton name={props.bot_name1} route = {props.route1} onClickAlto = {props.onClickAlto1}/>
+                <Boton name={props.bot_name2} route = {props.route2} onClickAlto = {props.onClickAlto2}/>
             </div>          
         </>
     );

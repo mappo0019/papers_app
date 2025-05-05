@@ -6,7 +6,7 @@ import Modal from "react-modal";
 
 function CreatorMain() {
 
-  const {id} = useParams();
+  const {id, type} = useParams();
 
     const [idProject, setIdProject] = useState("");
     const [nombre, setNombre] = useState("");
@@ -34,15 +34,45 @@ function CreatorMain() {
     var currentPage = 1;
     var newpaper = true;
 
+    const [loaded_proj, setLoadedProj] = useState({});
+
     useEffect(()=>{
-        const getUser = async ()=>{
-          let promise = await fetch(`http://localhost:5154/api/users/${id}`);
+        const getUser = async (ident = id)=>{
+          let promise = await fetch(`http://localhost:5154/api/users/${ident}`);
           let result =await promise.json();
           setMain(result);
-          setParticipantes([...participantes, {id: result.Id, name: result.name, openAlex_id: result.openAlex_id}])
+          setParticipantes([...participantes, {id: await result.Id, name: await result.name, openAlex_id: await result.openAlex_id}])
       }
-      getUser();
+
+      const getProj = async ()=>{
+        let promise = await fetch(`http://localhost:5154/api/projects/${id}`);
+        let result =await promise.json();
+
+        var parti= [];
+
+        setParticipantes(parti);
+
+        let promise2 = await fetch(`http://localhost:5154/api/users/${await result.main_researcher}`);
+          let result2 =await promise2.json();
+          setMain(result2);
+
+        for (let i = 0; i < await result.participantes.length; i++){
+          let prom = await fetch(`http://localhost:5154/api/users/${result.participantes[i]}`);
+          let res =await prom.json();
+          parti.push({id: await res.Id, name: await res.name, openAlex_id: await res.openAlex_id})
+      }
+
+        setNombre(await result.name);
+        setDesc(await result.descripcion);
+    }
+      if(type==="create"){
+        getUser();
       setIdProject(generarHex24());
+      }
+      else if (type === "edit"){
+        getProj();
+        setIdProject(id);
+      }
      }, [])
 
      const generarHex24 = () => {
@@ -61,7 +91,6 @@ function CreatorMain() {
           participantesId.push(participa.id);
         });
         
-
         participantes.map(async(participa)=>{
 
             var new_participantesId = participantesId.filter(a=> a != participa.id); 
@@ -69,7 +98,6 @@ function CreatorMain() {
             const response = await fetch(`http://localhost:5154/api/users/open?id=${participa.openAlex_id}`);
             const result = await response.json();
             if(response.status != 200){
-
             //AÑADIR NUEVOS
               const new_user={
                 Id: participa.id,
@@ -135,7 +163,19 @@ function CreatorMain() {
           presupuesto: 0.0,
         }
 
-        const posting1 = await fetch("http://localhost:5154/api/projects", {
+        if(type==="edit"){
+
+          fetch(`http://localhost:5154/api/projects/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json; charset=UTF-8' },
+            body: JSON.stringify(new_project),
+          }).then(response => response.text())
+          .then(data => console.log(data))
+          .catch(err => console.log(err))
+
+        }
+        else if(type === "create"){
+          const posting1 = await fetch("http://localhost:5154/api/projects", {
           method: 'POST',
           headers: { 'Content-Type': 'application/json; charset=UTF-8' },
           body: JSON.stringify(new_project),
@@ -143,8 +183,8 @@ function CreatorMain() {
 
         const good1 = await posting1.json();
         console.log(good1);
-        
-      
+        }
+
         //POST PAPERS
         for (let i = 0; i < participantes.length; i++){
           nodes = [];
@@ -180,7 +220,15 @@ function CreatorMain() {
           raw: (proj_papers)
         }
 
-        const posting = await fetch("http://localhost:5154/api/projectPapers", {
+        if(type==="edit"){
+          fetch(`http://localhost:5154/api/projectPapers/pr?project=${id}`, {
+            method: 'DELETE',
+          })
+          .then(res => res.text())
+          .then(res => console.log(res))
+        }
+
+        const posting = await fetch(`http://localhost:5154/api/projectPapers/`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json; charset=UTF-8' },
           body: JSON.stringify(new_project_papers),
@@ -188,6 +236,7 @@ function CreatorMain() {
 
         const good = await posting.json();
         console.log(good);
+        
 
         for (let e =0; e < all_users_papers.length; e++){
           const posting = await fetch("http://localhost:5154/api/papers", {
@@ -326,6 +375,7 @@ function CreatorMain() {
     }
 
     async function addUser(){
+      console.log(await participantes);
       if (userNombre != "" && userId != ""){
         var repe = false;
         for(let i = 0; i < participantes.length; i++){
@@ -364,16 +414,15 @@ function CreatorMain() {
     function deleteUser(id_user){
       setParticipantes(participantes => participantes.filter(a=> a.openAlex_id != id_user));
     }
-
-
     
     return (
       <>
       <form >
+        <Boton name="Atrás" route={`/creator_intro/${main.Id}`}/>
         <input type="text" disabled={true} placeholder={idProject}></input>
-        <input type="text" placeholder="Introduzca el Nombre del Proyecto..." onKeyUp={(e) => setNombre(e.target.value)}/>
+        <input type="text" placeholder="Introduzca el Nombre del Proyecto..." onKeyUp={(e) => setNombre(e.target.value)} value = {nombre}/>
         <input type="text" disabled={true} placeholder={main.name}></input>
-        <input type="text" placeholder="Introduzca las características de su proyecto" onKeyUp={(e) => setDesc(e.target.value)}/>
+        <input type="text" placeholder="Introduzca las características de su proyecto" onKeyUp={(e) => setDesc(e.target.value)} value = {desc}/>
         <Boton name="Añadir Participante" onClickAlto={handleOpen}/>
         <input type="number" placeholder="Financiación: 0.0€" disabled={true} />
       </form>
@@ -385,7 +434,7 @@ function CreatorMain() {
           <Boton name="X" onClickAlto={handleClose}/>
 
           {participantes.map((participa)=>(
-            participa.id != id ?
+            participa.id != main.Id ?
             <>
               <li>{participa.name}</li>
               <Boton name="Eliminar Usuario" onClickAlto={()=> deleteUser(participa.openAlex_id)}/>
