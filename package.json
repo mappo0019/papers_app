@@ -3,7 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@nivo/network": "^0.88.0",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mui/material": "^7.1.0",
+    "@nivo/bar": "^0.93.0",
+    "@nivo/line": "^0.94.0",
+    "@nivo/network": "^0.93.0",
     "@observablehq/runtime": "^5.9.9",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
