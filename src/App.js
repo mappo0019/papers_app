@@ -17,11 +17,11 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/sign_in" element={<SignIn/>}/>
-        <Route path="creator_intro/:id" element={<CreatorIntro />} />
+        <Route path="creator_intro/" element={<CreatorIntro />} />
         <Route path="creator_main/:id/:type" element={<CreatorMain />} />
-        <Route path="watcher_intro/:id" element={<WatcherIntro />} />
-        <Route path="watcher_main/:id" element={<WatcherMain />} />
-        <Route path="watcher_users/:id" element={<WatcherUsers />} />
+        <Route path="watcher_intro/" element={<WatcherIntro />} />
+        <Route path="watcher_main/" element={<WatcherMain />} />
+        <Route path="watcher_users/:proj_id" element={<WatcherUsers />} />
         <Route path="user_list/:id" element={<UserList />} />
         <Route path="project_list/:id" element={<ProjectList />} />
         <Route path="graph_data/:id/:type/:dates" element={<GraphData />} />

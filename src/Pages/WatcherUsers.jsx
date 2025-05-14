@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 
 function WatcherUsers() {
 
-  const {id} = useParams();
+  const {proj_id} = useParams();
 
   const [users, setUsers] = useState([]);
   const [response, setResponse] = useState([]);
@@ -23,7 +23,7 @@ function WatcherUsers() {
     }, [primera])
 
   const searchUsers = async ()=>{
-    let promise = await fetch(`http://localhost:5154/api/projects/${id}`);
+    let promise = await fetch(`http://localhost:5154/api/projects/${proj_id}`);
     let result =await promise.json();
     setResponse(result.participantes);
     setPrimera(true);
@@ -31,16 +31,21 @@ function WatcherUsers() {
   }
 
   const getUsers = () =>{ 
+      localStorage.setItem("projId", proj_id)
       response.map(async (participa)=>{
         let promise = await fetch(`http://localhost:5154/api/users/${participa}`);
         let result =await promise.json();
         setUsers(users=> [...users, result]);        
       })   
   }
+
+  function salir(){
+    localStorage.removeItem("projId");
+  }
   return (
     <>
       <div className = "watcher-users">
-        <Boton name="Atrás" route={`/watcher_main/${id}`}/>
+        <Boton name="Atrás" route={`/watcher_main/`} onClickAlto={salir}/>
         <h2>Usuarios:</h2>
         <div>
         {users.map((resp)=>(

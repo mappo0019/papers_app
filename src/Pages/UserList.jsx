@@ -12,6 +12,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import Modal from "react-modal";
 
  function UserList(props) {
     const {id} = useParams();
@@ -20,9 +21,14 @@ import Paper from '@mui/material/Paper';
     const [databars, setDataBars] = useState([]); 
     const [datalines, setDataLines] = useState([]); 
     const [datatables, setDataTables] = useState([]);
+    const [fechainicio, setFechainicio] = useState(0);
+    const [fechafin, setFechafin] = useState(0);
     const [cites, setCites] = useState(0); 
     const [h_index, setHIndex] = useState(0);
     const [name, setName] = useState("");
+    const [open, setOpen] = useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
     var data2 = []; 
     var contador = 0;  
     var fechas = []; 
@@ -211,11 +217,10 @@ import Paper from '@mui/material/Paper';
 
       papers_por_magazine = selectionSort_Objects(papers_por_magazine);
 
-      for (let i = papers_por_magazine.length-1; i > papers_por_magazine.length-6; i--){
+      for (let i = papers_por_magazine.length-1; i > papers_por_magazine.length-11; i--){
+        if(papers_por_magazine[i] != null)
         final_papers_magazines.push(papers_por_magazine[i]);
       }
-
-      console.log(final_papers_magazines);
 
       setDataTables(final_papers_magazines);
 
@@ -236,18 +241,36 @@ import Paper from '@mui/material/Paper';
       fetchData(); 
       getName();     
     }, []);
+    
 
 
     if(cites !== undefined && databars.length !== 0 && datalines.length !== 0 && datatables.length !== 0){
       return (
         <>
-        <Boton name="Atrás" route={`/watcher_users/${id}`}/>
+        <Boton name="Atrás" route={`/watcher_users/${localStorage.getItem("projId")}`}/>
         <h3>Información de {name}  </h3>
 
         <CompDash name="Número de papers publicados" valor={data.length}/>
         <CompDash name="Citas al autor" valor={cites}/>
         <CompDash name="Valor del h-index" valor={h_index}/>
 
+        <Boton name="Ver Red de Autoría" onClickAlto={handleOpen}/>
+
+        <Modal
+                isOpen={open}
+              >
+                  <Boton name="X" onClickAlto={handleClose}/>
+                  <h3>Buscar por fechas</h3>
+                  <form >
+                    <input id="fechainicio" type="number" placeholder="fecha de inicio" min = "0" onChange={(e) => setFechainicio(e.target.value)}/>
+                    <input id="fechafin" type="number" placeholder="fecha de fin" min = "0" onChange={(e) => setFechafin(e.target.value)}/>
+                    <Boton name="Ver Red Por Fechas" route={`/graph_data/${id}/user/${fechainicio}-${fechafin}`}/>
+                  </form>
+                  <Boton name="Ver Red Completa" route={`/graph_data/${id}/user/-`}/>
+              </Modal>
+
+
+        <h3>Número de papers publicados por año</h3>
         <div className="graph-cont">
         <ResponsiveBar
                     data={databars}
@@ -329,6 +352,7 @@ import Paper from '@mui/material/Paper';
                 />
         </div>
 
+        <h3>Número de citas por año</h3>
         <div className="graph-cont">
         <ResponsiveLine
         data={datalines}
@@ -357,7 +381,7 @@ import Paper from '@mui/material/Paper';
             tickSize: 5,
             tickPadding: 5,
             tickRotation: 0,
-            legend: 'Nº de Papers',
+            legend: 'Nº de Citas',
             legendOffset: -40,
             legendPosition: 'middle',
             truncateTickAt: 0
@@ -397,6 +421,8 @@ import Paper from '@mui/material/Paper';
         ]}
         role="application"
     />
+
+    <h3>Principales 10 revistas en las que ha publicado</h3>
 
     <div className="graph-cont">
       <TableContainer component={Paper}>

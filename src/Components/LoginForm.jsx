@@ -25,10 +25,12 @@ export function LoginForm(){
                     
                     if(rol != null){
                         if(rol === true){
-                            navigate(`/creator_intro/${await result2.Id}`);  
+                            localStorage.setItem("userId", await result2.Id);
+                            navigate(`/creator_intro/`);  
                         }
                         else{
-                            navigate(`/watcher_intro/${await result2.Id}`);
+                            localStorage.setItem("userId", await result2.Id);
+                            navigate(`/watcher_intro/`);
                         }
                     }
                     else{

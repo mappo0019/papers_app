@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "../styles/UserList.css";
-
+import Boton from "../Components/Boton";
 import { ResponsiveNetwork } from '@nivo/network'
 
  function GraphData(props) {
@@ -150,7 +150,7 @@ import { ResponsiveNetwork } from '@nivo/network'
       }
     }
   }
-  else if (type === "justusers"){
+  else if (type === "justresearchers"){
     try{
       let promise = await fetch(`http://localhost:5154/api/projects/${id}`);
       let result_users =await promise.json();
@@ -192,7 +192,7 @@ import { ResponsiveNetwork } from '@nivo/network'
       for (var j = 0; j < await graphData.authors.length; j++){               
         newnode = true;
         usable = true;
-          if(type === "justusers"){
+          if(type === "justresearchers"){
             usable = false;
             for(var b = 0; b < names.length; b++){
               if(await graphData.authors[j].id === names[b])
@@ -233,7 +233,6 @@ import { ResponsiveNetwork } from '@nivo/network'
         }
       }
     }
-    console.log(nodes);
   }
         
         setData(data2=>({
@@ -278,6 +277,11 @@ import { ResponsiveNetwork } from '@nivo/network'
     if(data2.nodes != null &&  name !== ""){
       return (
         <>
+        {(type==="user") ? 
+        <Boton name="Atrás" route={`/user_list/${id}`}/>
+        : 
+        <Boton name="Atrás" route={`/project_list/${id}`}/>
+        }   
         <h3>Papers de {name}  </h3>              
               <div className="graph-cont">
               <ResponsiveNetwork 

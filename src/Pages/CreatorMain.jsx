@@ -3,8 +3,11 @@ import Boton from "../Components/Boton";
 import "../styles/CreatorMain.css"
 import { useParams } from "react-router-dom";
 import Modal from "react-modal";
+import { useNavigate } from "react-router-dom";
 
 function CreatorMain() {
+
+  const navigate = useNavigate();
 
   const {id, type} = useParams();
 
@@ -33,8 +36,6 @@ function CreatorMain() {
     var hasMore = true;
     var currentPage = 1;
     var newpaper = true;
-
-    const [loaded_proj, setLoadedProj] = useState({});
 
     useEffect(()=>{
         const getUser = async (ident = id)=>{
@@ -72,6 +73,7 @@ function CreatorMain() {
       else if (type === "edit"){
         getProj();
         setIdProject(id);
+        document.getElementById("nombre").value = nombre;
       }
      }, [])
 
@@ -251,6 +253,7 @@ function CreatorMain() {
         
 
         alert("Proyecto creado con éxito");
+        navigate(`/creator_intro`);
       }
         
     }
@@ -385,22 +388,25 @@ function CreatorMain() {
         if(!repe){
           const response = await fetch(`https://api.openalex.org/people/${userId}`);
         if (response.status == 200){
-          try{
-            const response2 = await fetch(`http://localhost:5154/api/users/open?id=${userId}`)
-            if(response2.status == 200){
-              const result = await response2.json();
-              setParticipantes([...participantes, {id: await result.Id, name: await result.name, username: await result.username, openAlex_id: await result.openAlex_id}]);
-            }     
-            else
-              setParticipantes([...participantes, {id: generarHex24(), name: "Usuario Nuevo", username: userNombre, openAlex_id: userId}]);
-          }catch(error){
-            console.error("Error fetching data:", error);
+          const reg_exp = new RegExp("^[A-Z0-9_-]");
+          if (reg_exp.test(userId)){
+            try{
+              const response2 = await fetch(`http://localhost:5154/api/users/open?id=${userId}`)
+              if(response2.status == 200){
+                const result = await response2.json();
+                setParticipantes([...participantes, {id: await result.Id, name: await result.name, username: await result.username, openAlex_id: await result.openAlex_id}]);
+              }     
+              else
+                setParticipantes([...participantes, {id: generarHex24(), name: userNombre, username: userNombre, openAlex_id: userId}]);
+            }catch(error){
+              console.error("Error fetching data:", error);
+            }
           }
-          
-          
+          else
+            alert("El ID de OpenAlex no puede contener letras minúsculas")          
         }     
         else
-          alert("Error al añadir usuario, este usuario no existe en OpenAlex");
+          alert("Este usuario no existe en OpenAlex");
         }
         else
           alert("Este usuario ya ha sido añadido al proyecto")
@@ -414,15 +420,20 @@ function CreatorMain() {
     function deleteUser(id_user){
       setParticipantes(participantes => participantes.filter(a=> a.openAlex_id != id_user));
     }
+
+    function modifyValueName(val){
+      document.getElementById('nombre').value = val;
+      setNombre(val);
+    }
     
     return (
       <>
       <form >
-        <Boton name="Atrás" route={`/creator_intro/${main.Id}`}/>
+        <Boton name="Atrás" route={`/creator_intro`}/>
         <input type="text" disabled={true} placeholder={idProject}></input>
-        <input type="text" placeholder="Introduzca el Nombre del Proyecto..." onKeyUp={(e) => setNombre(e.target.value)} value = {nombre}/>
+        <input id = "nombre" type="text" placeholder="Introduzca el Nombre del Proyecto..." onKeyUp={((e) => setNombre(e.target.value))}/>
         <input type="text" disabled={true} placeholder={main.name}></input>
-        <input type="text" placeholder="Introduzca las características de su proyecto" onKeyUp={(e) => setDesc(e.target.value)} value = {desc}/>
+        <input type="text" placeholder="Introduzca las características de su proyecto" onKeyUp={(e) => setDesc(e.target.value)} />
         <Boton name="Añadir Participante" onClickAlto={handleOpen}/>
         <input type="number" placeholder="Financiación: 0.0€" disabled={true} />
       </form>

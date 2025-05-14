@@ -89,10 +89,12 @@ export function SignInForm(){
 
                                   
                                   if(rol === true){
-                                    navigate(`/creator_intro/${await new_user.Id}`);  
+                                    localStorage.setItem("userId", await new_user.Id);
+                                    navigate(`/creator_intro/`);  
                                 }
                                 else{
-                                    navigate(`/watcher_intro/${await new_user.Id}`);
+                                    localStorage.setItem("userId", await new_user.Id);
+                                    navigate(`/watcher_intro/`);
                                 }
                             }
                             else{

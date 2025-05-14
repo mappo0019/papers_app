@@ -2,13 +2,10 @@ import "../styles/WatcherMain.css"
 import Boton from "../Components/Boton";
 import { useEffect, useState } from "react";
 import FichaProyecto from "../Components/FichaProyecto";
-import { useParams } from "react-router-dom";
 import Modal from "react-modal";
 import { useNavigate } from "react-router-dom";
 
 function CreatorIntro() {
-
-    const {id} = useParams();
 
     const navigate = useNavigate();
   
@@ -18,7 +15,7 @@ function CreatorIntro() {
 
   useEffect(()=>{
     const searchProjects = async ()=>{
-      let promise = await fetch(`http://localhost:5154/api/projects/us?user=${id}`);
+      let promise = await fetch(`http://localhost:5154/api/projects/us?user=${localStorage.getItem("userId")}`);
       let result =await promise.json();
       setResponse(result);
   }
@@ -72,11 +69,17 @@ function CreatorIntro() {
 
     setOpenDel(false);
 
-    navigate(`/creator_intro/${id}`)
+    navigate(`/creator_intro`)
+  }
+
+  function salir(){
+    localStorage.removeItem("userId");
+    
   }
 
     return (
       <>
+        <Boton name="Salir" onClickAlto={salir} route={"/"}/>
         <div className = "watcher-body">
           <h2>TUS PROYECTOS</h2>
           <div>
@@ -87,7 +90,7 @@ function CreatorIntro() {
                   
                 ))}
         </div>
-        <Boton name="Nuevo Proyecto" route={`/creator_main/${id}/create`} />
+        <Boton name="Nuevo Proyecto" route={`/creator_main/${localStorage.getItem("userId")}/create`} />
         </div>
 
         <Modal
