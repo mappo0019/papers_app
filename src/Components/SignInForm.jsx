@@ -67,7 +67,6 @@ export function SignInForm(){
                                         name: result.display_name? result.display_name : "",
                                         rol: rol,
                                         project: [],
-                                        magazines:[],
                                         coworkers: []
                                 }
                                 const posting2 = await fetch("http://localhost:5154/api/login", {
@@ -172,7 +171,7 @@ export function SignInForm(){
             </div>
 
             <div className="form_cnt">
-                <Boton name="Log In" onClickAlto={submit} />
+                <Boton name="Sign In" onClickAlto={submit} />
             </div>
 
         </div>

@@ -312,7 +312,6 @@ function CreatorMain() {
               user: await userId.toUpperCase(),
               year: await year,
               authors: await nodes,
-              relationship: await links
             }
 
             graphDatas.push(new_graph_data);
@@ -420,24 +419,43 @@ function CreatorMain() {
     function deleteUser(id_user){
       setParticipantes(participantes => participantes.filter(a=> a.openAlex_id != id_user));
     }
-
-    function modifyValueName(val){
-      document.getElementById('nombre').value = val;
-      setNombre(val);
-    }
     
     return (
       <>
       <form >
         <Boton name="Atrás" route={`/creator_intro`}/>
         <input type="text" disabled={true} placeholder={idProject}></input>
-        <input id = "nombre" type="text" placeholder="Introduzca el Nombre del Proyecto..." onKeyUp={((e) => setNombre(e.target.value))}/>
+        {type ==="edit" ? 
+        <>
+          <input id = "nombre" type="text" placeholder="Introduzca el Nombre del Proyecto..." onKeyUp={((e) => setNombre(e.target.value))} value={nombre} disabled={true}/>
+        </>
+        :
+        <>
+          <input id = "nombre" type="text" placeholder="Introduzca el Nombre del Proyecto..." onKeyUp={((e) => setNombre(e.target.value))}/>
+        </>}
+        
         <input type="text" disabled={true} placeholder={main.name}></input>
-        <input type="text" placeholder="Introduzca las características de su proyecto" onKeyUp={(e) => setDesc(e.target.value)} />
+        {type ==="edit" ? 
+        <>
+          <input type="text" placeholder="Introduzca las características de su proyecto" onKeyUp={(e) => setDesc(e.target.value)} value={desc} disabled={true} />
+        </>
+        :
+        <>
+          <input type="text" placeholder="Introduzca las características de su proyecto" onKeyUp={(e) => setDesc(e.target.value)} />
+        </>}
+        
         <Boton name="Añadir Participante" onClickAlto={handleOpen}/>
         <input type="number" placeholder="Financiación: 0.0€" disabled={true} />
       </form>
-      <Boton name="Crear Proyecto" onClickAlto={submitProyecto}/>
+
+      {type ==="edit" ? 
+        <>
+          <Boton name="Actualizar Proyecto" onClickAlto={submitProyecto}/>
+        </>
+        :
+        <>
+          <Boton name="Crear Proyecto" onClickAlto={submitProyecto}/>
+        </>}
 
       <Modal
         isOpen={open}
