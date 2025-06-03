@@ -162,7 +162,6 @@ function CreatorMain() {
           main_researcher: main.Id,
           descripcion: desc,
           participantes:participantesId,
-          presupuesto: 0.0,
         }
 
         if(type==="edit"){
@@ -445,7 +444,6 @@ function CreatorMain() {
         </>}
         
         <Boton name="Añadir Participante" onClickAlto={handleOpen}/>
-        <input type="number" placeholder="Financiación: 0.0€" disabled={true} />
       </form>
 
       {type ==="edit" ? 
