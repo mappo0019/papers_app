@@ -1,0 +1,37 @@
+.watcher_body{
+    text-align: center;
+}
+
+.ficha_proyecto{
+    background-color: white;
+    display:inline-block;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-bottom: 16px;
+    border-radius: 8px;
+    margin: 8px;
+}
+
+.buscador{
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    input[type="text"],
+      input[type="password"]
+      {
+        width: 30%;
+        margin-left: 10%;
+        margin-bottom: 25px;
+        height: 40px;
+        border-radius: 5px;
+        outline: 0;
+      }
+
+      button{
+        height: 40px;
+      }
+}
+
+.chart_cont{
+    height: 500px;
+}

@@ -6,14 +6,12 @@ function Login() {
   return (
     <>
       <div className ="login_body">
-        <h1>PAPERS APP</h1>
-        <Boton name="¿No tienes cuenta?" route="/sign_in" />
-        <div className="login_form">
+        <h1 className = "cabecera">PAPERS APP</h1>
+        
+        <div className="body_login_form">
           <LoginForm />
         </div>
-        
-      </div>
-      
+      </div>  
     </>
     
   );

@@ -1,6 +1,6 @@
-import "../styles/WatcherMain.css"
+import "../styles/Watcher.css"
 import Boton from "../Components/Boton";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import FichaSeguir from "../Components/FichaSeguir";
 
 function WatcherIntro() {
@@ -14,7 +14,6 @@ function WatcherIntro() {
         let result =await promise.json();
         setProject(await result);
     }
-    
   } 
 
   async function seguirProj(pr_id){
@@ -56,39 +55,41 @@ function WatcherIntro() {
     if(project != null)
         return (
         <>
-        <Boton name="Salir" onClickAlto={salir} route={"/"}/>
-            <div className = "watcher-body">
-            <h2>BUSCA NUEVOS PROYECTOS</h2>
-            <Boton name="Proyectos Seguidos" route={`/watcher_main/`} />
-            <div>
+            <div className = "cabecera">
+                <Boton class = "back_btn" name="↩" onClickAlto={salir} route={"/"}/>
+                <h1>BUSCAR NUEVOS PROYECTOS</h1>
+            </div>
+            <div className = "watcher_body">
+            <div className = "buscador">
                 <input id="busca" placeholder= "Introduce el nombre del proyecto" type="text" />
-                <Boton name ="Buscar" onClickAlto={searchProjects} className ="search_btn"></Boton>
+                <Boton class = "neutral_btn" name ="Buscar" onClickAlto={searchProjects} className ="search_btn"></Boton>
+            </div>
+            
+                <FichaSeguir name ={project.name} onClickAlto2={()=>seguirProj(project.Id)} />
+            
             </div>
 
-            <div>
-                <FichaSeguir name ={project.name} onClickAlto2={()=>seguirProj(project.Id)} />
+            <div className = "watcher_body">
+            <Boton class = "neutral_btn" name="Proyectos Seguidos" route={`/watcher_main/`} />
             </div>
-            
-            </div>
-            
         </>
         
         );
     else
     return (
         <>
-        <Boton name="Salir" onClickAlto={salir} route={"/"}/>
-            <div className = "watcher-body">
-            <h2>BUSCA NUEVOS PROYECTOS</h2>
-            <Boton name="Proyectos Seguidos" route={`/watcher_main/`} />
-            <div>
-                <input id="busca" placeholder= "Introduce el nombre del proyecto" type="text" />
-                <Boton name ="Buscar" onClickAlto={searchProjects} className ="search_btn"></Boton>
+            <div className = "cabecera">
+                <Boton class = "back_btn" name="↩" onClickAlto={salir} route={"/"}/>
+                <h1>BUSCAR NUEVOS PROYECTOS</h1>
             </div>
-
-            <div>
+            <div className = "watcher_body">
+                <Boton class = "neutral_btn" name="Proyectos Seguidos" route={`/watcher_main/`} />
+                <br />
+                <div className = "buscador">
+                    <input id="busca" placeholder= "Introduce el nombre del proyecto" type="text" />
+                    <Boton class = "neutral_btn" name ="Buscar" onClickAlto={searchProjects} className ="search_btn"></Boton>
+                </div>
                 <p>Ningún proyecto coincide con el ID introducido</p>
-            </div>
             
             </div>
             

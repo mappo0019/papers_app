@@ -1,24 +1,70 @@
 body{
-    background-color:lightgray;
-    align-items: center;
+    background-color:rgb(255, 255, 255);
 }
 
 .login_body{
+    text-align: center;   
+}
+
+.cabecera{
+    border-radius: 8px;
+    display: block;
+    background-color: #1e90ff;
+    color: #ffffff;
+    align-items:center;
     text-align: center;
-    
-}
+    padding: 6px;
+  }
 
-.login_form{
+.body_login_form {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
     align-items: center;
-    background-color: rgb(255, 255, 255);
-    position: absolute;
-    border-radius: 8px; 
+}
+.container {
+    background-color: white;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 90%;
+    max-width: 300px;
+
+      input[type="text"],
+      input[type="password"],
+      input[type="number"],
+      button {
+        width: 80%;
+        margin-left: 10%;
+        margin-bottom: 25px;
+        height: 40px;
+        border-radius: 5px;
+        outline: 0;
+      }
+
+      input[type="text"],
+      input[type="password"] {
+        border: 1px solid #bbb;
+        padding: 0 0 0 10px;
+        font-size: 14px;
+        &:focus {
+          border: 1px solid #3498db;
+        }
+      }
+
+      a {
+        text-align: center;
+        font-size: 10px;
+        color: #3498db;
+        
+        p{
+          padding-bottom: 10px;
+        }
+        
+      }
 }
 
-.form_cnt{
-    margin: 16px;
-}
 
-.titulo_form{
-    font-size: 22px;
-}
+
+

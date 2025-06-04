@@ -1,4 +1,4 @@
-import "../styles/WatcherMain.css"
+import "../styles/Watcher.css"
 import { useEffect, useState } from "react";
 import FichaProyecto from "../Components/FichaProyecto";
 import Boton from "../Components/Boton";
@@ -30,9 +30,11 @@ function WatcherMain() {
 
     return (
       <>
-        <div className = "watcher-body">
-          <Boton name="Atrás" route={`/watcher_intro`}/>
-          <h2>PROYECTOS A LOS QUE SIGUES</h2>
+        <div className ="cabecera">
+          <Boton class = "back_btn" name="↩" route={`/watcher_intro`}/>
+          <h2>PROYECTOS SEGUIDOS</h2>
+          </div>
+          <div className = "watcher_body">
           <div>
           {response.map((resp)=>(
             <>

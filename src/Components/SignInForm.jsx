@@ -143,21 +143,18 @@ export function SignInForm(){
 
     return(
         <>
-        <div className="login_form">
+        <div className="container">
 
             <div className="form_cnt">
-                <label htmlFor="user" className="titulo_form">Usuario:</label>
-                <input id ="us" type="text" className="input_login" placeholder="Introduza su nombre de usuario" required/>
+                <input placeholder = "User" id ="us" type="text" className="input_login" required/>
             </div>
 
             <div className="form_cnt">
-                <label htmlFor="openAlex" className="titulo_form">ID de OpenAlex:</label>
-                <input id="openAlexId" type="text" className="input_login" placeholder="Introduzca su ID de OpenAlex" required/>
+                <input placeholder = "OpenAlexId" id="openAlexId" type="text" className="input_login" required/>
             </div>
 
             <div className="form_cnt">
-                <label htmlFor="password" className="titulo_form">Password:</label>
-                <input id="passwd" type="password" className="input_login" placeholder="Introduzca su contraseña" required/>
+                <input placeholder = "Password" id="passwd" type="password" className="input_login" required/>
             </div>
 
             <div className="form_cnt">
@@ -170,8 +167,10 @@ export function SignInForm(){
                 <label for="watcher" className="titulo_form">Watcher</label>
             </div>
 
+            <br></br>
+            
             <div className="form_cnt">
-                <Boton name="Sign In" onClickAlto={submit} />
+                <Boton class = "neutral_btn" name="Sign In" onClickAlto={submit} />
             </div>
 
         </div>

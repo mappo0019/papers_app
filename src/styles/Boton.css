@@ -7,3 +7,55 @@
     padding: 8px;
     margin: 8px;
 }
+
+.neutral_btn{
+    background-color: #1e90ff;
+    color: white;
+    border-radius: 8px;
+    border-color: #1e90ff;
+    width:max-content;
+    font-size: 18px;
+    padding: 8px;
+    margin: 8px;
+}
+
+.back_btn{
+  background-color: #1e90ff;
+  color: white;
+  border-width: 0px;
+  font-size: 24px;
+  margin-right: 0px;
+}
+
+.bad_btn{
+    background-color: #f22121;
+    color: white;
+    border-radius: 8px;
+    border-color: #f22121;
+    width:max-content;
+    font-size: 18px;
+    padding: 8px;
+    margin: 8px;
+}
+
+.good_btn{
+    background-color: #2b9131;
+    color: white;
+    border-radius: 8px;
+    border-color: #2b9131;
+    width:max-content;
+    font-size: 18px;
+    padding: 8px;
+    margin: 8px;
+}
+
+.change_btn{
+    background-color: #f99407;
+    color: white;
+    border-radius: 8px;
+    border-color: #f99407;
+    width:max-content;
+    font-size: 18px;
+    padding: 8px;
+    margin: 8px;
+}

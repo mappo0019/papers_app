@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Boton from "../Components/Boton";
-import "../styles/CreatorMain.css"
+import "../styles/Creator.css"
 import { useParams } from "react-router-dom";
 import Modal from "react-modal";
 import { useNavigate } from "react-router-dom";
@@ -421,66 +421,89 @@ function CreatorMain() {
     
     return (
       <>
-      <form >
-        <Boton name="Atrás" route={`/creator_intro`}/>
-        <input type="text" disabled={true} placeholder={idProject}></input>
-        {type ==="edit" ? 
-        <>
-          <input id = "nombre" type="text" placeholder="Introduzca el Nombre del Proyecto..." onKeyUp={((e) => setNombre(e.target.value))} value={nombre} disabled={true}/>
-        </>
-        :
-        <>
-          <input id = "nombre" type="text" placeholder="Introduzca el Nombre del Proyecto..." onKeyUp={((e) => setNombre(e.target.value))}/>
-        </>}
-        
-        <input type="text" disabled={true} placeholder={main.name}></input>
-        {type ==="edit" ? 
-        <>
-          <input type="text" placeholder="Introduzca las características de su proyecto" onKeyUp={(e) => setDesc(e.target.value)} value={desc} disabled={true} />
-        </>
-        :
-        <>
-          <input type="text" placeholder="Introduzca las características de su proyecto" onKeyUp={(e) => setDesc(e.target.value)} />
-        </>}
-        
-        <Boton name="Añadir Participante" onClickAlto={handleOpen}/>
-      </form>
+      <div className = "cabecera">
+        <Boton class= "back_btn" name="↩" route={`/creator_intro`}/>
 
-      {type ==="edit" ? 
+        {type === "edit" ?
+        <h1>Editar Proyecto</h1>
+        :
+        <h1>Crear Proyecto</h1>
+        }
+      </div>
+        <div className = "main_body">
+          <div className = "container" >
+            <input type="text" disabled={true} placeholder={idProject}></input>
+            {type ==="edit" ? 
+            <>
+              <input id = "nombre" type="text" placeholder="Nombre del Proyecto" onKeyUp={((e) => setNombre(e.target.value))} value={nombre} disabled={true}/>
+            </>
+            :
+            <>
+              <input id = "nombre" type="text" placeholder="Nombre del Proyecto" onKeyUp={((e) => setNombre(e.target.value))}/>
+            </>}
+        
+            <input type="text" disabled={true} placeholder={main.name}></input>
+            {type ==="edit" ? 
+            <>
+              <input type="text" placeholder="Características del proyecto" onKeyUp={(e) => setDesc(e.target.value)} value={desc} disabled={true} />
+            </>
+            :
+            <>
+              <input type="text" placeholder="Características del proyecto" onKeyUp={(e) => setDesc(e.target.value)} />
+            </>}
+        
+            <Boton class = "neutral_btn" name="Añadir Participante" onClickAlto={handleOpen}/>
+          </div>
+        </div>
+        <br />
+        <div className = "main_body">
+          {type ==="edit" ? 
         <>
-          <Boton name="Actualizar Proyecto" onClickAlto={submitProyecto}/>
+          <Boton class = "good_btn" name="Actualizar Proyecto" onClickAlto={submitProyecto}/>
         </>
         :
         <>
-          <Boton name="Crear Proyecto" onClickAlto={submitProyecto}/>
+          <Boton class = "good_btn" name="Crear Proyecto" onClickAlto={submitProyecto}/>
         </>}
 
       <Modal
         isOpen={open}
       >
           <Boton name="X" onClickAlto={handleClose}/>
-
+            
           {participantes.map((participa)=>(
             participa.id != main.Id ?
             <>
+              <div className = "main_body">
               <li>{participa.name}</li>
-              <Boton name="Eliminar Usuario" onClickAlto={()=> deleteUser(participa.openAlex_id)}/>
+
+              <Boton class= "bad_btn" name="Eliminar Usuario" onClickAlto={()=> deleteUser(participa.openAlex_id)}/>
+
+              </div>
             </>
             :
             <>
+            <div className = "main_body">
             <br></br>
             <li>{participa.name}</li>
             <br></br>
+            </div>
             </>
             
 
           ))}
-          <form >
+          <br />
+          <div className = "main_body">
+          <div className = "container">
             <input type="text" placeholder="Introduzca el Nombre del Investigador..." onKeyUp={(e) => setUserNombre(e.target.value)}/>
             <input type="text" placeholder="Introduzca el ID de OpenAlex" onKeyUp={(e) => setUserId(e.target.value)}/>
-          </form>
-          <Boton name="Añadir Usuario" onClickAlto={addUser}/>
+          <Boton class= "neutral_btn" name="Añadir Usuario" onClickAlto={addUser}/>
+          </div>
+          </div>
+          
       </Modal>
+        </div>
+      
       </>
     );
   }

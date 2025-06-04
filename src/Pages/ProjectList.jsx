@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import "../styles/UserList.css";
+import "../styles/Watcher.css";
 import CompDash from "../Components/CompDash";
 import Boton from "../Components/Boton";
 import { ResponsiveBar } from '@nivo/bar'
@@ -245,38 +245,61 @@ import Modal from "react-modal";
     if(cites !== undefined){
     return (
       <>
-      <Boton name="Atrás" route={`/watcher_main/`}/>
-        <div>
-            <h3>Información de {name}  </h3>
-            <CompDash name="Número de papers publicados" valor={data.length}/>
-            <CompDash name="Citas al autor" valor={cites}/>
-            <CompDash name="Valor del h-index" valor={h_index}/>
+      <div className ="cabecera">
+        <Boton class="back_btn" name="↩" route={`/watcher_main/`}/>
+        <h1>{name.toUpperCase()}</h1>
+      </div>
+      <br />
+      <div className = "watcher_body">
+        <CompDash name="Número de papers publicados" valor={data.length}/>
+        <CompDash name="Citas al autor" valor={cites}/>
+        <CompDash name="Valor del h-index" valor={h_index}/>
+      </div>
 
-            <Boton name="Ver Red de Autoría" onClickAlto={handleOpen}/>
+        <div className = "watcher_body">
+          <Boton class = "change_btn" name="Ver Red de Autoría" onClickAlto={handleOpen}/>
+        </div>
             
                     <Modal
                             isOpen={open}
                           >
                               <Boton name="X" onClickAlto={handleClose}/>
+                              <div className = "main_body">
                               <h3>Buscar por fechas</h3>
-                              <form >
-                                <input id="fechainicio" type="number" placeholder="fecha de inicio" min = "0" onChange={(e) => setFechainicio(e.target.value)}/>
-                                <input id="fechafin" type="number" placeholder="fecha de fin" min = "0" onChange={(e) => setFechafin(e.target.value)}/>
-                                <Boton name="Ver Red Por Fechas" route={`/graph_data/${id}/project/${fechainicio}-${fechafin}`}/>
-                              </form>
-                              <Boton name="Ver Red Completa" route={`/graph_data/${id}/project/-`}/>
+                              </div>
+                              <div className = "main_body">
+                                <div className="container">
+                                  <input id="fechainicio" type="number" placeholder="fecha de inicio" min = "0" onChange={(e) => setFechainicio(e.target.value)}/>
+                                  <input id="fechafin" type="number" placeholder="fecha de fin" min = "0" onChange={(e) => setFechafin(e.target.value)}/>
+                                  <Boton class ="neutral_btn" name="Ver Red Por Fechas" route={`/graph_data/${id}/project/${fechainicio}-${fechafin}`}/>
+                                </div>
+                              </div>
                               <br />
-                              <h3>Buscar por fechas solo investigadores</h3>
-                              <form >
+                              <div className = "main_body">
+                                <Boton class = "neutral_btn" name="Ver Red Completa" route={`/graph_data/${id}/project/-`}/>
+                              </div>       
+                              <br />
+                              <div className = "main_body">
+                                <h3>Buscar por fechas solo investigadores</h3>
+                              </div>
+                              
+                              <div className = "main_body" >
+                                <div className="container">
                                 <input id="fechainicio" type="number" placeholder="fecha de inicio" min = "0" onChange={(e) => setFechainicio(e.target.value)}/>
                                 <input id="fechafin" type="number" placeholder="fecha de fin" min = "0" onChange={(e) => setFechafin(e.target.value)}/>
-                                <Boton name="Ver Red Por Fechas" route={`/graph_data/${id}/justresearchers/${fechainicio}-${fechafin}`}/>
-                              </form>
-                              <Boton name="Ver Solo Investigadores" route={`/graph_data/${id}/justresearchers/-`}/>
+                                <Boton class = "neutral_btn" name="Ver Red Por Fechas" route={`/graph_data/${id}/justresearchers/${fechainicio}-${fechafin}`}/>
+                                </div>
+                              </div>
+                              <br />
+                              <div className = "main_body">
+                                <Boton class = "neutral_btn" name="Ver Solo Investigadores" route={`/graph_data/${id}/justresearchers/-`}/>
+                              </div>
+                              
+                              
                     </Modal>
-          
-          <h3>Número de papers publicados por año</h3>
-                  <div className="graph-cont">
+                  <div className ="watcher_body">
+                  <h2>Número de papers y citas por año</h2>
+                  <div className="chart_cont">
                   <ResponsiveBar
                               data={databars}
                               keys={[
@@ -356,9 +379,7 @@ import Modal from "react-modal";
                               barAriaLabel={e=>`${e.id}: ${e.formattedValue} en el año: ${e.indexValue}`}
                           />
                   </div>
-          
-                  <h3>Número de citas por año</h3>
-                  <div className="graph-cont">
+                  <div className="chart_cont">
                   <ResponsiveLine
                   data={datalines}
                   margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
@@ -426,8 +447,10 @@ import Modal from "react-modal";
                   ]}
                   role="application"
               />
-          
-              <h3>Principales 10 revistas en las que ha publicado</h3>
+              </div>
+              <br />
+              <div className ="watcher_body">
+              <h2>Principales 10 revistas en las que ha publicado</h2>
           
               <div className="graph-cont">
                 <TableContainer component={Paper}>
@@ -453,10 +476,9 @@ import Modal from "react-modal";
                     </TableBody>
                   </Table>
                 </TableContainer>
-               
+               </div>
               </div>
             
-        </div>
         </div>
       </>
     );

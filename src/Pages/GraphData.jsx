@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import "../styles/UserList.css";
+import "../styles/Graph.css";
 import Boton from "../Components/Boton";
 import { ResponsiveNetwork } from '@nivo/network'
 
@@ -277,12 +277,14 @@ import { ResponsiveNetwork } from '@nivo/network'
     if(data2.nodes != null &&  name !== ""){
       return (
         <>
+        <div className= "cabecera">
         {(type==="user") ? 
-        <Boton name="Atrás" route={`/user_list/${id}`}/>
+        <Boton class = "back_btn" name="↩" route={`/user_list/${id}`}/>
         : 
-        <Boton name="Atrás" route={`/project_list/${id}`}/>
+        <Boton class = "back_btn" name="↩" route={`/project_list/${id}`}/>
         }   
-        <h3>Papers de {name}  </h3>              
+        <h3>Grafo de {name}  </h3> 
+        </div>             
               <div className="graph-cont">
               <ResponsiveNetwork 
                 data={data2} 

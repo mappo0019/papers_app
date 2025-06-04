@@ -1,4 +1,4 @@
-import "../styles/WatcherMain.css"
+import "../styles/Creator.css"
 import Boton from "../Components/Boton";
 import { useEffect, useState } from "react";
 import FichaProyecto from "../Components/FichaProyecto";
@@ -79,9 +79,11 @@ function CreatorIntro() {
 
     return (
       <>
-        <Boton name="Salir" onClickAlto={salir} route={"/"}/>
-        <div className = "watcher-body">
-          <h2>TUS PROYECTOS</h2>
+      <div className = "cabecera">
+        <Boton class = "back_btn" name="↩" onClickAlto={salir} route={"/"}/>
+          <h1>TUS PROYECTOS</h1>
+      </div>
+          <div className = "creator-body">
           <div>
           {response.map((resp)=>(
             <>
@@ -90,14 +92,14 @@ function CreatorIntro() {
                   
                 ))}
         </div>
-        <Boton name="Nuevo Proyecto" route={`/creator_main/${localStorage.getItem("userId")}/create`} />
+        <Boton class = "neutral_btn" name="Nuevo Proyecto" route={`/creator_main/${localStorage.getItem("userId")}/create`} />
         </div>
 
         <Modal
         isOpen= {openDel}>
           <h2>¿Seguro que quieres eliminar este proyecto?</h2>
-          <Boton name="Eliminar" onClickAlto={deleteProj}/>
-          <Boton name="Cancelar" onClickAlto={()=>setOpenDel(false)}/>
+          <Boton class="bad_btn" name="Eliminar" onClickAlto={deleteProj}/>
+          <Boton class = "neutral_btn" name="Cancelar" onClickAlto={()=>setOpenDel(false)}/>
       </Modal>
         
       </>

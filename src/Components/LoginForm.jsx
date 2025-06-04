@@ -54,21 +54,18 @@ export function LoginForm(){
 
     return(
         <>
-        <div className="login_form">
+        <div className="container">
 
             <div className="form_cnt">
-                <label htmlFor="user" className="titulo_form">User:</label>
-                <input id ="us" type="text" className="input_login" place required/>
+                <input placeholder= "User" id ="us" type="text" className="input_login" place required/>
             </div>
 
             <div className="form_cnt">
-                <label htmlFor="password" className="titulo_form">Password:</label>
-                <input id="passwd" type="password" className="input_login" required/>
+                <input placeholder= "Password" id="passwd" type="password" className="input_login" required/>
             </div>
+            <Boton class ="neutral_btn" name="Log In" onClickAlto={submit} />
 
-            <div className="form_cnt">
-                <Boton name="Log In" onClickAlto={submit} />
-            </div>
+            <a href="/sign_in"> <p> ¿No tienes una cuenta? ¡Regístrate! </p></a>
             
             
 

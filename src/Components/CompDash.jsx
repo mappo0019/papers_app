@@ -1,4 +1,4 @@
-import "../styles/WatcherMain.css"
+import "../styles/Watcher.css"
 import { Link } from "react-router-dom";
 import Boton from "./Boton";
 

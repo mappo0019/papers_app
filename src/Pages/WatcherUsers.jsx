@@ -1,4 +1,4 @@
-import "../styles/WatcherUsers.css"
+import "../styles/Watcher.css"
 import Boton from "../Components/Boton";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -44,19 +44,19 @@ function WatcherUsers() {
   }
   return (
     <>
-      <div className = "watcher-users">
-        <Boton name="Atrás" route={`/watcher_main/`} onClickAlto={salir}/>
+      <div className = "cabecera">
+        <Boton class = "back_btn" name="↩" route={`/watcher_main/`} onClickAlto={salir}/>
         <h2>Usuarios:</h2>
-        <div>
+        </div>
+        <div className = "watcher_body">
         {users.map((resp)=>(
           <>
-            <Boton className = "" name ={resp.name} route = {`/user_list/${resp.openAlex_id}`}></Boton>
+            <Boton class = "good_btn" className = "" name ={resp.name} route = {`/user_list/${resp.openAlex_id}`}></Boton>
             <br></br>
           </>
           
         ))}
         </div>
-      </div>
     </>
     
   );

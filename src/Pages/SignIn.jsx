@@ -6,9 +6,12 @@ function SignIn() {
   return (
     <>
       <div className ="login_body">
-        <Boton name="Atrás" route="/"/>
+        <div className = "cabecera">
+        <Boton class = "back_btn" name="↩" route="/"/>
         <h1>REGÍSTRATE</h1>
-        <div className="login_form">
+        </div>
+        <br></br>
+        <div className="body_login_form">
           <SignInForm />
         </div>
         
