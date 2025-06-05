@@ -83,14 +83,15 @@ function WatcherIntro() {
                 <h1>BUSCAR NUEVOS PROYECTOS</h1>
             </div>
             <div className = "watcher_body">
-                <Boton class = "neutral_btn" name="Proyectos Seguidos" route={`/watcher_main/`} />
-                <br />
+
                 <div className = "buscador">
                     <input id="busca" placeholder= "Introduce el nombre del proyecto" type="text" />
                     <Boton class = "neutral_btn" name ="Buscar" onClickAlto={searchProjects} className ="search_btn"></Boton>
                 </div>
+                
                 <p>Ningún proyecto coincide con el ID introducido</p>
-            
+                <br />
+                <Boton class = "neutral_btn" name="Proyectos Seguidos" route={`/watcher_main/`} />
             </div>
             
         </>
