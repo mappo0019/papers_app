@@ -39,26 +39,26 @@ function CreatorMain() {
 
     useEffect(()=>{
         const getUser = async (ident = id)=>{
-          let promise = await fetch(`http://localhost:5154/api/users/${ident}`);
+          let promise = await fetch(`http://localhost:5000/api/users/${ident}`);
           let result =await promise.json();
           setMain(result);
           setParticipantes([...participantes, {id: await result.Id, name: await result.name, openAlex_id: await result.openAlex_id}])
       }
 
       const getProj = async ()=>{
-        let promise = await fetch(`http://localhost:5154/api/projects/${id}`);
+        let promise = await fetch(`http://localhost:5000/api/projects/${id}`);
         let result =await promise.json();
 
         var parti= [];
 
         setParticipantes(parti);
 
-        let promise2 = await fetch(`http://localhost:5154/api/users/${await result.main_researcher}`);
+        let promise2 = await fetch(`http://localhost:5000/api/users/${await result.main_researcher}`);
           let result2 =await promise2.json();
           setMain(result2);
 
         for (let i = 0; i < await result.participantes.length; i++){
-          let prom = await fetch(`http://localhost:5154/api/users/${result.participantes[i]}`);
+          let prom = await fetch(`http://localhost:5000/api/users/${result.participantes[i]}`);
           let res =await prom.json();
           parti.push({id: await res.Id, name: await res.name, openAlex_id: await res.openAlex_id})
       }
@@ -97,7 +97,7 @@ function CreatorMain() {
 
             var new_participantesId = participantesId.filter(a=> a != participa.id); 
 
-            const response = await fetch(`http://localhost:5154/api/users/open?id=${participa.openAlex_id}`);
+            const response = await fetch(`http://localhost:5000/api/users/open?id=${participa.openAlex_id}`);
             const result = await response.json();
             if(response.status != 200){
             //AÑADIR NUEVOS
@@ -111,7 +111,7 @@ function CreatorMain() {
                 coworkers:new_participantesId,
               }
 
-              const posting = await fetch("http://localhost:5154/api/users", {
+              const posting = await fetch("http://localhost:5000/api/users", {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json; charset=UTF-8' },
                 body: JSON.stringify(new_user),
@@ -144,7 +144,7 @@ function CreatorMain() {
                 coworkers:cow,
               }
 
-              fetch(`http://localhost:5154/api/users/${result.Id}`, {
+              fetch(`http://localhost:5000/api/users/${result.Id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json; charset=UTF-8' },
                 body: JSON.stringify(new_user),
@@ -166,7 +166,7 @@ function CreatorMain() {
 
         if(type==="edit"){
 
-          fetch(`http://localhost:5154/api/projects/${id}`, {
+          fetch(`http://localhost:5000/api/projects/${id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json; charset=UTF-8' },
             body: JSON.stringify(new_project),
@@ -176,7 +176,7 @@ function CreatorMain() {
 
         }
         else if(type === "create"){
-          const posting1 = await fetch("http://localhost:5154/api/projects", {
+          const posting1 = await fetch("http://localhost:5000/api/projects", {
           method: 'POST',
           headers: { 'Content-Type': 'application/json; charset=UTF-8' },
           body: JSON.stringify(new_project),
@@ -198,7 +198,7 @@ function CreatorMain() {
           await fetchData(currentPage, participantes[i].openAlex_id);
 
           for (let j = 0; j < graphDatas.length; j++){
-            const posting = await fetch("http://localhost:5154/api/graphData", {
+            const posting = await fetch("http://localhost:5000/api/graphData", {
               method: 'POST',
               headers: { 'Content-Type': 'application/json; charset=UTF-8' },
               body: JSON.stringify(graphDatas[j]),
@@ -222,14 +222,14 @@ function CreatorMain() {
         }
 
         if(type==="edit"){
-          fetch(`http://localhost:5154/api/projectPapers/pr?project=${id}`, {
+          fetch(`http://localhost:5000/api/projectPapers/pr?project=${id}`, {
             method: 'DELETE',
           })
           .then(res => res.text())
           .then(res => console.log(res))
         }
 
-        const posting = await fetch(`http://localhost:5154/api/projectPapers/`, {
+        const posting = await fetch(`http://localhost:5000/api/projectPapers/`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json; charset=UTF-8' },
           body: JSON.stringify(new_project_papers),
@@ -240,7 +240,7 @@ function CreatorMain() {
         
 
         for (let e =0; e < all_users_papers.length; e++){
-          const posting = await fetch("http://localhost:5154/api/papers", {
+          const posting = await fetch("http://localhost:5000/api/papers", {
             method: 'POST',
             headers: { 'Content-Type': 'application/json; charset=UTF-8' },
             body: JSON.stringify(all_users_papers[e]),
@@ -260,11 +260,11 @@ function CreatorMain() {
     async function fetchData(page, userId){
       try {
 
-        const resp = await fetch(`http://localhost:5154/api/graphData/us?user=${userId}`);
+        const resp = await fetch(`http://localhost:5000/api/graphData/us?user=${userId}`);
         const res = await resp.json();
         if(await res.length !== 0){
           for (let a = 0; a < res.length; a++){
-            fetch(`http://localhost:5154/api/graphData/${res[a].Id}`, {
+            fetch(`http://localhost:5000/api/graphData/${res[a].Id}`, {
               method: 'DELETE',
             })
             .then(res => res.text())
@@ -358,10 +358,10 @@ function CreatorMain() {
             raw: (stringed_papers)
           }
 
-          const response = await fetch(`http://localhost:5154/api/papers/us?user=${new_papers.user}`);
+          const response = await fetch(`http://localhost:5000/api/papers/us?user=${new_papers.user}`);
           if(response.status === 200){
             const result = await response.json();
-            fetch(`http://localhost:5154/api/papers/${await result.Id}`, {
+            fetch(`http://localhost:5000/api/papers/${await result.Id}`, {
             method: 'DELETE',
           })
           .then(res => res.text())
@@ -389,7 +389,7 @@ function CreatorMain() {
           const reg_exp = new RegExp("^[A-Z0-9_-]");
           if (reg_exp.test(userId)){
             try{
-              const response2 = await fetch(`http://localhost:5154/api/users/open?id=${userId}`)
+              const response2 = await fetch(`http://localhost:5000/api/users/open?id=${userId}`)
               if(response2.status == 200){
                 const result = await response2.json();
                 setParticipantes([...participantes, {id: await result.Id, name: await result.name, username: await result.username, openAlex_id: await result.openAlex_id}]);

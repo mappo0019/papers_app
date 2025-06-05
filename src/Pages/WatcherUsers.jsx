@@ -23,7 +23,7 @@ function WatcherUsers() {
     }, [primera])
 
   const searchUsers = async ()=>{
-    let promise = await fetch(`http://localhost:5154/api/projects/${proj_id}`);
+    let promise = await fetch(`http://localhost:5000/api/projects/${proj_id}`);
     let result =await promise.json();
     setResponse(result.participantes);
     setPrimera(true);
@@ -33,7 +33,7 @@ function WatcherUsers() {
   const getUsers = () =>{ 
       localStorage.setItem("projId", proj_id)
       response.map(async (participa)=>{
-        let promise = await fetch(`http://localhost:5154/api/users/${participa}`);
+        let promise = await fetch(`http://localhost:5000/api/users/${participa}`);
         let result =await promise.json();
         setUsers(users=> [...users, result]);        
       })   

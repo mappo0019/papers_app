@@ -15,7 +15,7 @@ function CreatorIntro() {
 
   useEffect(()=>{
     const searchProjects = async ()=>{
-      let promise = await fetch(`http://localhost:5154/api/projects/us?user=${localStorage.getItem("userId")}`);
+      let promise = await fetch(`http://localhost:5000/api/projects/us?user=${localStorage.getItem("userId")}`);
       let result =await promise.json();
       setResponse(result);
   }
@@ -29,19 +29,19 @@ function CreatorIntro() {
   }
 
   async function deleteProj(){
-    fetch(`http://localhost:5154/api/projects/${deletedId}`, {
+    fetch(`http://localhost:5000/api/projects/${deletedId}`, {
       method: 'DELETE',
     })
     .then(res => res.text())
     .then(res => console.log(res))
 
-    fetch(`http://localhost:5154/api/projectPapers/pr?project=${deletedId}`, {
+    fetch(`http://localhost:5000/api/projectPapers/pr?project=${deletedId}`, {
       method: 'DELETE',
     })
     .then(res => res.text())
     .then(res => console.log(res))
 
-    let promise = await fetch(`http://localhost:5154/api/users/proj?project=${deletedId}`);
+    let promise = await fetch(`http://localhost:5000/api/users/proj?project=${deletedId}`);
       let result =await promise.json();
       for(let i = 0; i < await result.length; i++){
         let newProj = await result[i].project.filter(a=> a != deletedId);
@@ -58,7 +58,7 @@ function CreatorIntro() {
 
         console.log(result[i].Id)
 
-        fetch(`http://localhost:5154/api/users/${result[i].Id}`, {
+        fetch(`http://localhost:5000/api/users/${result[i].Id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json; charset=UTF-8' },
           body: JSON.stringify(new_user),

@@ -25,7 +25,7 @@ import { ResponsiveNetwork } from '@nivo/network'
         let fecha1 = parseInt(dates.substring(0, dates.indexOf("-")));
         let fecha2 = parseInt(dates.substring(dates.indexOf("-")+1));
         try {
-          const response = await fetch(`http://localhost:5154/api/graphData/us?user=${id}&date1=${fecha1}&date2=${fecha2}`);
+          const response = await fetch(`http://localhost:5000/api/graphData/us?user=${id}&date1=${fecha1}&date2=${fecha2}`);
           const result = await response.json();
           data = await result;
   
@@ -35,7 +35,7 @@ import { ResponsiveNetwork } from '@nivo/network'
       }
       else{
         try {
-        const response = await fetch(`http://localhost:5154/api/graphData/us?user=${id}`);
+        const response = await fetch(`http://localhost:5000/api/graphData/us?user=${id}`);
         const result = await response.json();
         data = await result;
 
@@ -81,13 +81,13 @@ import { ResponsiveNetwork } from '@nivo/network'
     }
     else if(type === "project"){
       try{
-        let promise = await fetch(`http://localhost:5154/api/projects/${id}`);
+        let promise = await fetch(`http://localhost:5000/api/projects/${id}`);
         let result_users =await promise.json();
         let users = await result_users.participantes;
         let openAlexIds = [];
 
         for(let i = 0; i < users.length; i++){
-          let promise = await fetch(`http://localhost:5154/api/users/${users[i]}`);
+          let promise = await fetch(`http://localhost:5000/api/users/${users[i]}`);
           let result =await promise.json();
           openAlexIds.push(await result.openAlex_id);
         }
@@ -96,14 +96,14 @@ import { ResponsiveNetwork } from '@nivo/network'
           let fecha1 = parseInt(dates.substring(0,dates.indexOf("-")));
           let fecha2 = parseInt(dates.substring(dates.indexOf("-")+1));
             for(let i = 0; i < await openAlexIds.length; i++){
-              const response = await fetch(`http://localhost:5154/api/graphData/us?user=${openAlexIds[i]}&date1=${fecha1}&date2=${fecha2}`);
+              const response = await fetch(`http://localhost:5000/api/graphData/us?user=${openAlexIds[i]}&date1=${fecha1}&date2=${fecha2}`);
               const result = await response.json();
               data.push(await result);
               }
         }
         else{
           for(let i = 0; i < await openAlexIds.length; i++){
-          const response = await fetch(`http://localhost:5154/api/graphData/us?user=${openAlexIds[i]}`);
+          const response = await fetch(`http://localhost:5000/api/graphData/us?user=${openAlexIds[i]}`);
           const result = await response.json();
           data.push(await result);
           }
@@ -152,13 +152,13 @@ import { ResponsiveNetwork } from '@nivo/network'
   }
   else if (type === "justresearchers"){
     try{
-      let promise = await fetch(`http://localhost:5154/api/projects/${id}`);
+      let promise = await fetch(`http://localhost:5000/api/projects/${id}`);
       let result_users =await promise.json();
       let users = await result_users.participantes;
       let openAlexIds = [];
 
       for(let i = 0; i < users.length; i++){
-        let promise = await fetch(`http://localhost:5154/api/users/${users[i]}`);
+        let promise = await fetch(`http://localhost:5000/api/users/${users[i]}`);
         let result =await promise.json();
         openAlexIds.push(await result.openAlex_id);
         names.push(await result.name);
@@ -168,14 +168,14 @@ import { ResponsiveNetwork } from '@nivo/network'
         let fecha1 = parseInt(dates.substring(0,dates.indexOf("-")));
         let fecha2 = parseInt(dates.substring(dates.indexOf("-")+1));
           for(let i = 0; i < await openAlexIds.length; i++){
-            const response = await fetch(`http://localhost:5154/api/graphData/us?user=${openAlexIds[i]}&date1=${fecha1}&date2=${fecha2}`);
+            const response = await fetch(`http://localhost:5000/api/graphData/us?user=${openAlexIds[i]}&date1=${fecha1}&date2=${fecha2}`);
             const result = await response.json();
             data.push(await result);
             }
       }
       else{
         for(let i = 0; i < await openAlexIds.length; i++){
-        const response = await fetch(`http://localhost:5154/api/graphData/us?user=${openAlexIds[i]}`);
+        const response = await fetch(`http://localhost:5000/api/graphData/us?user=${openAlexIds[i]}`);
         const result = await response.json();
         data.push(await result);
         }
@@ -253,7 +253,7 @@ import { ResponsiveNetwork } from '@nivo/network'
     async function getName(){
       if(type==="user"){
         try {
-          const response = await fetch(`http://localhost:5154/api/users/open?id=${id}`);
+          const response = await fetch(`http://localhost:5000/api/users/open?id=${id}`);
           const result = await response.json();
           setName(await result.name);
   
@@ -263,7 +263,7 @@ import { ResponsiveNetwork } from '@nivo/network'
       }
       else{
         try {
-          const response = await fetch(`http://localhost:5154/api/projects/${id}`);
+          const response = await fetch(`http://localhost:5000/api/projects/${id}`);
           const result = await response.json();
           setName(await result.name);
   

@@ -74,7 +74,7 @@ import Modal from "react-modal";
     const fetchData = async () => {
       try {
        
-        const response = await fetch(`http://localhost:5154/api/papers/us?user=${id}`);
+        const response = await fetch(`http://localhost:5000/api/papers/us?user=${id}`);
         const result = await response.json();
 
         for (let i = 0; i < await result.raw.length; i++){
@@ -228,7 +228,7 @@ import Modal from "react-modal";
 
     async function getName(){
         try {
-          const response = await fetch(`http://localhost:5154/api/users/open?id=${id}`);
+          const response = await fetch(`http://localhost:5000/api/users/open?id=${id}`);
           const result = await response.json();
           setName(await result.name);
   

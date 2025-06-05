@@ -11,11 +11,11 @@ function WatcherMain() {
 
   useEffect(()=>{
     const searchProjects = async ()=>{
-      let prom = await fetch(`http://localhost:5154/api/users/${localStorage.getItem("userId")}`);
+      let prom = await fetch(`http://localhost:5000/api/users/${localStorage.getItem("userId")}`);
       let res = await prom.json();
       
       for(let i = 0; i < await res.project.length; i++){
-        let promise = await fetch(`http://localhost:5154/api/projects/${res.project[i]}`);
+        let promise = await fetch(`http://localhost:5000/api/projects/${res.project[i]}`);
         let result =await promise.json();
         setResponse(response=> [...response, result]);
       }

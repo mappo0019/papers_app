@@ -13,13 +13,13 @@ export function LoginForm(){
         try{
             var user = document.getElementById('us').value;
             var passwd = document.getElementById('passwd').value;
-            let promise = await fetch(`http://localhost:5154/api/login/us?user=${user}`);
+            let promise = await fetch(`http://localhost:5000/api/login/us?user=${user}`);
             let result =await promise.json();
             loginuser = await result;
             
             if(loginuser.Id != null){
                 if(user === loginuser.user && passwd == loginuser.password){
-                    let promise2 = await fetch(`http://localhost:5154/api/users/us?username=${user}`);
+                    let promise2 = await fetch(`http://localhost:5000/api/users/us?username=${user}`);
                     let result2 =await promise2.json();
                     var rol = await result2.rol;
                     

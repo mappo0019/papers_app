@@ -16,7 +16,7 @@ export function SignInForm(){
         var avanza = false;
         var valid_user= checkText(document.getElementById('us').value);
         if(valid_user){
-            let prom = await fetch(`http://localhost:5154/api/users/us?username=${document.getElementById('us').value}`);
+            let prom = await fetch(`http://localhost:5000/api/users/us?username=${document.getElementById('us').value}`);
                 if(prom.status !== 200){ 
                     if(document.getElementById('openAlexId').disabled === false){
                         const reg_exp = new RegExp("^[A-Z0-9_-]");
@@ -24,7 +24,7 @@ export function SignInForm(){
                         if (reg_exp.test(new_id)){
                             let promise = await fetch(`https://api.openalex.org/people/${new_id}`);
                             if(promise.status === 200){
-                                let promise2 = await fetch(`http://localhost:5154/api/users/open?id=${new_id}`);
+                                let promise2 = await fetch(`http://localhost:5000/api/users/open?id=${new_id}`);
                                 if(promise2.status !== 200){
                                     avanza = true;
                                 }
@@ -69,7 +69,7 @@ export function SignInForm(){
                                         project: [],
                                         coworkers: []
                                 }
-                                const posting2 = await fetch("http://localhost:5154/api/login", {
+                                const posting2 = await fetch("http://localhost:5000/api/login", {
                                     method: 'POST',
                                     headers: { 'Content-Type': 'application/json; charset=UTF-8' },
                                     body: JSON.stringify(login),
@@ -78,7 +78,7 @@ export function SignInForm(){
                                   const good2 = await posting2.json();
                                   console.log(good2);
 
-                                const posting = await fetch("http://localhost:5154/api/users", {
+                                const posting = await fetch("http://localhost:5000/api/users", {
                                     method: 'POST',
                                     headers: { 'Content-Type': 'application/json; charset=UTF-8' },
                                     body: JSON.stringify(new_user),

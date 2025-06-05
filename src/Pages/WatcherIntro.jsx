@@ -10,7 +10,7 @@ function WatcherIntro() {
   async function searchProjects(){
     var ident = document.getElementById('busca').value;
     if(ident !== ""){
-        let promise = await fetch(`http://localhost:5154/api/projects/${ident}`);
+        let promise = await fetch(`http://localhost:5000/api/projects/${ident}`);
         let result =await promise.json();
         setProject(await result);
     }
@@ -18,7 +18,7 @@ function WatcherIntro() {
 
   async function seguirProj(pr_id){
 
-    let promise = await fetch(`http://localhost:5154/api/users/${localStorage.getItem("userId")}`);
+    let promise = await fetch(`http://localhost:5000/api/users/${localStorage.getItem("userId")}`);
     let result =await promise.json();
 
     var proj = result.project;
@@ -36,7 +36,7 @@ function WatcherIntro() {
         coworkers:result.coworkers,
     }
 
-    fetch(`http://localhost:5154/api/users/${result.Id}`, {
+    fetch(`http://localhost:5000/api/users/${result.Id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json; charset=UTF-8' },
         body: JSON.stringify(new_user),
