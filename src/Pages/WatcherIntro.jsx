@@ -85,7 +85,7 @@ function WatcherIntro() {
             <div className = "watcher_body">
 
                 <div className = "buscador">
-                    <input id="busca" placeholder= "Introduce el nombre del proyecto" type="text" />
+                    <input id="busca" placeholder= "Introduce el ID del proyecto" type="text" />
                     <Boton class = "neutral_btn" name ="Buscar" onClickAlto={searchProjects} className ="search_btn"></Boton>
                 </div>
                 
