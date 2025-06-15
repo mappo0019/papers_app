@@ -88,6 +88,7 @@ function CreatorMain() {
         alert("El Proyecto debe de tener un Nombre");
       }
       else{ 
+        alert("Procesando datos...");
         //ACTUALIZAR USERS
         participantes.map((participa)=>{
           participantesId.push(participa.id);
@@ -251,7 +252,7 @@ function CreatorMain() {
         }
         
 
-        alert("Proyecto creado con éxito");
+        alert("Operación exitosa");
         navigate(`/creator_intro`);
       }
         
